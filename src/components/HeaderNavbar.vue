@@ -53,20 +53,31 @@
             Arsip &<br />Berita
           </button>
 
-          <!-- Active State: Presensi (Halaman Utama Sesuai Figma) -->
+          <!-- Nav: Presensi -->
           <router-link 
             to="/" 
-            class="px-5 py-2.5 bg-[#E6F3F7] text-[#0B6B82] font-semibold text-xs lg:text-sm rounded-xl transition-all shadow-xs flex items-center justify-center cursor-pointer"
+            :class="[
+              'px-5 py-2.5 rounded-xl text-xs lg:text-sm font-semibold transition-all flex items-center justify-center cursor-pointer',
+              $route.path === '/' || $route.path === '/presensi'
+                ? 'bg-[#E6F3F7] text-[#0B6B82] shadow-xs'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+            ]"
           >
             Presensi
           </router-link>
 
-          <button 
-            type="button" 
-            class="px-3.5 py-2 text-xs lg:text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors text-center leading-tight rounded-xl hover:bg-slate-50 cursor-pointer"
+          <!-- Nav: Statistik -->
+          <router-link 
+            to="/statistik/harian" 
+            :class="[
+              'px-5 py-2.5 rounded-xl text-xs lg:text-sm font-semibold transition-all flex items-center justify-center cursor-pointer',
+              $route.path.startsWith('/statistik')
+                ? 'bg-[#E6F3F7] text-[#0B6B82] shadow-xs'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+            ]"
           >
             Statistik
-          </button>
+          </router-link>
         </nav>
 
         <!-- Right Action Buttons -->

@@ -5,7 +5,7 @@ const BerandaPage = () => import('../views/BerandaPage.vue')
 const KategoriPage = () => import('../views/KategoriPage.vue')
 const DetailBukuPage = () => import('../views/buku/DetailBukuPage.vue')
 const PresensiPage = () => import('../views/PresensiPage.vue')
-const StatistikHarianPage = () => import('../views/statistik/StatistikHarianPage.vue')
+const StatistikHarianView = () => import('../views/statistik/StatistikHarianView.vue')
 const StatistikMingguanPage = () => import('../views/statistik/StatistikMingguanPage.vue')
 const StatistikBulananPage = () => import('../views/statistik/StatistikBulananPage.vue')
 const AdminDashboardPage = () => import('../views/admin/AdminDashboardPage.vue')
@@ -54,9 +54,9 @@ const routes = [
   {
     path: '/statistik/harian',
     name: 'StatistikHarian',
-    component: StatistikHarianPage,
+    component: StatistikHarianView,
     meta: {
-      title: 'Statistik Harian & Buku Tamu - E-Library SMAN 11 Garut'
+      title: 'Statistik & Presensi Pengunjung - E-Library SMAN 11 Garut'
     }
   },
   {
