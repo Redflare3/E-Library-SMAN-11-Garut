@@ -193,9 +193,23 @@
                 v-if="point.isPeak"
                 :cx="point.x"
                 :cy="point.y"
-                r="10"
-                class="fill-[#0B6B82]/20 animate-ping pointer-events-none"
-              />
+                r="6"
+                fill="#0B6B82"
+                class="pointer-events-none"
+              >
+                <animate
+                  attributeName="r"
+                  values="6; 16"
+                  dur="1.6s"
+                  repeatCount="indefinite"
+                />
+                <animate
+                  attributeName="opacity"
+                  values="0.65; 0"
+                  dur="1.6s"
+                  repeatCount="indefinite"
+                />
+              </circle>
 
               <!-- Point Circle (Stabil, Tanpa Shaking/Jitter) -->
               <circle

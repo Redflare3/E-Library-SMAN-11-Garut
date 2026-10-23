@@ -7,7 +7,7 @@ const DetailBukuPage = () => import('../views/buku/DetailBukuPage.vue')
 const PresensiPage = () => import('../views/PresensiPage.vue')
 const StatistikHarianView = () => import('../views/statistik/StatistikHarianView.vue')
 const StatistikMingguanView = () => import('../views/statistik/StatistikMingguanView.vue')
-const StatistikBulananPage = () => import('../views/statistik/StatistikBulananPage.vue')
+const StatistikBulananView = () => import('../views/statistik/StatistikBulananView.vue')
 const AdminDashboardPage = () => import('../views/admin/AdminDashboardPage.vue')
 
 const routes = [
@@ -70,9 +70,9 @@ const routes = [
   {
     path: '/statistik/bulanan',
     name: 'StatistikBulanan',
-    component: StatistikBulananPage,
+    component: StatistikBulananView,
     meta: {
-      title: 'Statistik Bulanan - E-Library SMAN 11 Garut'
+      title: 'Visualisasi Linear Tren Kunjungan Bulanan - E-Library SMAN 11 Garut'
     }
   },
   {
