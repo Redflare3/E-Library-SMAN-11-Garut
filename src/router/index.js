@@ -9,8 +9,19 @@ const StatistikHarianView = () => import('../views/statistik/StatistikHarianView
 const StatistikMingguanView = () => import('../views/statistik/StatistikMingguanView.vue')
 const StatistikBulananView = () => import('../views/statistik/StatistikBulananView.vue')
 const AdminDashboardPage = () => import('../views/admin/AdminDashboardPage.vue')
+const AdminDashboardView = () => import('../views/admin/AdminDashboardView.vue')
+const LoginView = () => import('../views/auth/LoginView.vue')
 
 const routes = [
+  {
+    path: '/login',
+    name: 'Login',
+    component: LoginView,
+    meta: {
+      title: 'Portal Autentikasi Pengurus - E-Library SMAN 11 Garut',
+      hideNavbar: true
+    }
+  },
   {
     path: '/',
     name: 'Presensi',
@@ -76,12 +87,17 @@ const routes = [
     }
   },
   {
-    path: '/admin',
+    path: '/admin/dashboard',
     name: 'AdminDashboard',
-    component: AdminDashboardPage,
+    component: AdminDashboardView,
     meta: {
-      title: 'Panel Pengelola Perpustakaan - SMAN 11 Garut'
+      title: 'Panel Pengelola Perpustakaan - SMAN 11 Garut',
+      hideNavbar: true
     }
+  },
+  {
+    path: '/admin',
+    redirect: '/admin/dashboard'
   },
   // Fallback Wildcard Route (404)
   {

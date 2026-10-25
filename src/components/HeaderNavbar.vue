@@ -30,32 +30,37 @@
           </div>
         </router-link>
 
-        <!-- Center Menu Navigasi (Persis Desain Figma) -->
+        <!-- Center Menu Navigasi (4 Opsi: Katalog Buku, Cari & Filter Kategori, Presensi, Statistik) -->
         <nav class="hidden md:flex items-center gap-1 lg:gap-2">
-          <button 
-            type="button" 
-            class="px-3.5 py-2 text-xs lg:text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors text-center leading-tight rounded-xl hover:bg-slate-50 cursor-pointer"
+          <!-- 1. Katalog Buku -->
+          <router-link 
+            to="/katalog"
+            :class="[
+              'px-3.5 py-2 text-xs lg:text-sm font-medium transition-colors text-center leading-tight rounded-xl cursor-pointer',
+              $route.path === '/katalog'
+                ? 'bg-[#E6F3F7] text-[#0B6B82] font-semibold shadow-xs'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+            ]"
           >
             Katalog<br />Buku
-          </button>
+          </router-link>
 
-          <button 
-            type="button" 
-            class="px-3.5 py-2 text-xs lg:text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors text-center leading-tight rounded-xl hover:bg-slate-50 cursor-pointer"
+          <!-- 2. Cari & Filter Kategori -->
+          <router-link 
+            to="/kategori"
+            :class="[
+              'px-3.5 py-2 text-xs lg:text-sm font-medium transition-colors text-center leading-tight rounded-xl cursor-pointer',
+              $route.path === '/kategori'
+                ? 'bg-[#E6F3F7] text-[#0B6B82] font-semibold shadow-xs'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+            ]"
           >
             Cari & Filter<br />Kategori
-          </button>
+          </router-link>
 
-          <button 
-            type="button" 
-            class="px-3.5 py-2 text-xs lg:text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors text-center leading-tight rounded-xl hover:bg-slate-50 cursor-pointer"
-          >
-            Arsip &<br />Berita
-          </button>
-
-          <!-- Nav: Presensi -->
+          <!-- 3. Nav: Presensi -->
           <router-link 
-            to="/" 
+            to="/presensi" 
             :class="[
               'px-5 py-2.5 rounded-xl text-xs lg:text-sm font-semibold transition-all flex items-center justify-center cursor-pointer',
               $route.path === '/' || $route.path === '/presensi'
@@ -66,7 +71,7 @@
             Presensi
           </router-link>
 
-          <!-- Nav: Statistik -->
+          <!-- 4. Nav: Statistik -->
           <router-link 
             to="/statistik/harian" 
             :class="[
@@ -107,8 +112,13 @@
             </svg>
           </button>
 
-          <!-- School / Profile Circle Avatar -->
-          <router-link to="/admin" class="w-10 h-10 rounded-full border border-slate-200 bg-slate-100 flex items-center justify-center overflow-hidden shrink-0 cursor-pointer" title="Admin Perpustakaan">
+          <!-- School / Profile Circle Avatar (Fungsi Logout / Kembali ke Login) -->
+          <button 
+            type="button" 
+            class="w-10 h-10 rounded-full border border-slate-200 bg-slate-100 hover:border-slate-400 hover:ring-2 hover:ring-slate-200 flex items-center justify-center overflow-hidden shrink-0 cursor-pointer transition-all" 
+            title="Keluar / Ganti Akun (Logout)"
+            @click="handleLogout"
+          >
             <img 
               v-if="userAvatarUrl" 
               :src="userAvatarUrl" 
@@ -120,7 +130,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-          </router-link>
+          </button>
         </div>
       </div>
     </div>
@@ -150,6 +160,16 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+// Fungsi Logout saat menekan profile picture
+const handleLogout = () => {
+  localStorage.removeItem('auth_role')
+  localStorage.removeItem('auth_user')
+  router.push('/login')
+}
 
 // Props untuk data gambar dinamis (bila disediakan back-end)
 defineProps({
