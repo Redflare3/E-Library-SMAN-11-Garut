@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 // Views - Lazy-loaded untuk optimasi rendering modular
 const BerandaPage = () => import('../views/BerandaPage.vue')
-const KategoriPage = () => import('../views/KategoriPage.vue')
+const CariKategoriView = () => import('../views/CariKategoriView.vue')
 const DetailBukuView = () => import('../views/DetailBukuView.vue')
 const PresensiPage = () => import('../views/PresensiPage.vue')
 const StatistikHarianView = () => import('../views/statistik/StatistikHarianView.vue')
@@ -45,8 +45,9 @@ const routes = [
   },
   {
     path: '/kategori',
+    alias: '/search',
     name: 'Kategori',
-    component: KategoriPage,
+    component: CariKategoriView,
     meta: {
       title: 'Cari & Filter Kategori - E-Library SMAN 11 Garut'
     }
