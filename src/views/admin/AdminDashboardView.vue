@@ -730,6 +730,22 @@
 
       </section>
 
+      <!-- Modal Dialog Sunting Data Buku (Edit Buku Admin) -->
+      <EditBukuModal
+        :is-open="isEditModalOpen"
+        :buku-data="selectedBuku"
+        @close="isEditModalOpen = false"
+        @save="handleSaveEditedBook"
+      />
+
+      <!-- Modal Dialog Konfirmasi Hapus Buku (Delete Buku Admin) -->
+      <DeleteBukuModal
+        :is-open="isDeleteModalOpen"
+        :buku-data="selectedDeleteBuku"
+        @close="isDeleteModalOpen = false"
+        @confirm-delete="handleConfirmDelete"
+      />
+
     </div>
   </div>
 </template>
@@ -738,8 +754,18 @@
 import { ref, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import schoolLogo from '../../assets/images/placeholders/logo-sman11.svg'
+import EditBukuModal from '../../components/admin/EditBukuModal.vue'
+import DeleteBukuModal from '../../components/admin/DeleteBukuModal.vue'
 
 const router = useRouter()
+
+// Modal Edit Buku State
+const isEditModalOpen = ref(false)
+const selectedBuku = ref(null)
+
+// Modal Delete Buku State
+const isDeleteModalOpen = ref(false)
+const selectedDeleteBuku = ref(null)
 
 // 1. Search & Filter State
 const searchQuery = ref('')
@@ -931,18 +957,46 @@ const resetForm = () => {
 
 // Action: Edit & Delete Book
 const handleEditBook = (buku) => {
-  newBook.isbn = buku.isbn
-  newBook.title = buku.title
-  newBook.author = buku.author
-  newBook.publisher = buku.publisher
-  tableNotification.value = `Memuat data "${buku.title}" ke form sunting di sebelah kanan.`
+  selectedBuku.value = buku
+  isEditModalOpen.value = true
+}
+
+const handleSaveEditedBook = (updatedData) => {
+  const index = bukuList.value.findIndex(item => item.id === updatedData.id)
+  if (index !== -1) {
+    bukuList.value[index] = {
+      ...bukuList.value[index],
+      title: updatedData.title,
+      shortTitle: updatedData.title.split(' ')[0] || bukuList.value[index].shortTitle,
+      isbn: updatedData.isbn,
+      author: updatedData.author,
+      publisher: updatedData.publisher,
+      formatType: updatedData.format?.includes('PDF') ? 'PDF' : 'ePub',
+      formatLabel: updatedData.format?.includes('PDF') ? 'PDF (14 MB)' : 'ePub (6.2 MB)',
+      categoryName: updatedData.category?.includes('Fase F') ? 'Fase F • Fisika' : 'Fase E • Umum',
+      synopsis: updatedData.synopsis
+    }
+  }
+  isEditModalOpen.value = false
+  tableNotification.value = `Perubahan metadata "${updatedData.title}" berhasil disimpan!`
+  setTimeout(() => {
+    tableNotification.value = ''
+  }, 4000)
 }
 
 const handleDeleteBook = (buku) => {
-  if (confirm(`Hapus "${buku.title}" dari katalog perpustakaan digital?`)) {
-    bukuList.value = bukuList.value.filter(item => item.id !== buku.id)
-    tableNotification.value = `Buku "${buku.title}" telah dihapus.`
-  }
+  selectedDeleteBuku.value = buku
+  isDeleteModalOpen.value = true
+}
+
+const handleConfirmDelete = (bukuId) => {
+  const deletedTitle = selectedDeleteBuku.value?.title || 'Buku'
+  bukuList.value = bukuList.value.filter(item => item.id !== bukuId)
+  isDeleteModalOpen.value = false
+  tableNotification.value = `Buku "${deletedTitle}" telah berhasil dihapus dari repositori digital!`
+  setTimeout(() => {
+    tableNotification.value = ''
+  }, 4000)
 }
 
 // Handle Logout / Ganti Akun / Peran
