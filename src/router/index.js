@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 // Views - Lazy-loaded untuk optimasi rendering modular
 const BerandaPage = () => import('../views/BerandaPage.vue')
 const KategoriPage = () => import('../views/KategoriPage.vue')
-const DetailBukuPage = () => import('../views/buku/DetailBukuPage.vue')
+const DetailBukuView = () => import('../views/DetailBukuView.vue')
 const PresensiPage = () => import('../views/PresensiPage.vue')
 const StatistikHarianView = () => import('../views/statistik/StatistikHarianView.vue')
 const StatistikMingguanView = () => import('../views/statistik/StatistikMingguanView.vue')
@@ -11,6 +11,7 @@ const StatistikBulananView = () => import('../views/statistik/StatistikBulananVi
 const AdminDashboardPage = () => import('../views/admin/AdminDashboardPage.vue')
 const AdminDashboardView = () => import('../views/admin/AdminDashboardView.vue')
 const LoginView = () => import('../views/auth/LoginView.vue')
+const KatalogView = () => import('../views/KatalogView.vue')
 
 const routes = [
   {
@@ -24,22 +25,22 @@ const routes = [
   },
   {
     path: '/',
+    name: 'Katalog',
+    component: KatalogView,
+    meta: {
+      title: 'Katalog Utama - E-Library SMAN 11 Garut'
+    }
+  },
+  {
+    path: '/katalog',
+    redirect: '/'
+  },
+  {
+    path: '/presensi',
     name: 'Presensi',
     component: PresensiPage,
     meta: {
       title: 'E-Library SMAN 11 Garut - Presensi Mandiri Pengunjung'
-    }
-  },
-  {
-    path: '/presensi',
-    redirect: '/'
-  },
-  {
-    path: '/katalog',
-    name: 'Beranda',
-    component: BerandaPage,
-    meta: {
-      title: 'Katalog Utama - E-Library SMAN 11 Garut'
     }
   },
   {
@@ -53,7 +54,7 @@ const routes = [
   {
     path: '/buku/:id',
     name: 'DetailBuku',
-    component: DetailBukuPage,
+    component: DetailBukuView,
     meta: {
       title: 'Detail & Pembaca Dokumen - E-Library SMAN 11 Garut'
     }

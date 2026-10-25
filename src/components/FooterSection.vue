@@ -33,20 +33,12 @@
           <p class="text-xs text-slate-500 leading-relaxed max-w-sm">
             Perpustakaan Digital SMAN 11 Garut menyediakan akses mudah, terbuka, dan terpadu ke ribuan literatur akademik, buku teks kurikulum merdeka, karya tulis siswa, serta jurnal digital penunjang prestasi sekolah.
           </p>
-
-          <!-- Badge NPP Perpustakaan Nasional -->
-          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 border border-sky-200/80 text-[11px] font-semibold text-[#0B6B82]">
-            <svg class="w-3.5 h-3.5 text-[#0B6B82]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-            </svg>
-            <span>NPP: 320500120000011</span>
-          </div>
         </div>
 
         <!-- Kolom 2: Lokasi & Kontak (3 Cols) -->
         <div class="lg:col-span-3 space-y-3">
           <h4 class="text-xs font-bold text-slate-800 tracking-wider uppercase mb-4">
-            LOKASI & KONTAK
+            LOKASI &amp; KONTAK
           </h4>
 
           <ul class="space-y-3 text-xs">
@@ -104,19 +96,9 @@
             </div>
 
             <div class="flex items-center justify-between py-1">
-              <span class="font-medium text-slate-700">Minggu & Libur Nasional</span>
+              <span class="font-medium text-slate-700">Minggu &amp; Libur Nasional</span>
               <span class="font-bold text-rose-500">Tutup</span>
             </div>
-          </div>
-
-          <!-- Alert Callout 24 Jam -->
-          <div class="p-3 rounded-xl bg-[#EFF8FA] border border-sky-100 flex items-center gap-2.5 mt-3">
-            <svg class="w-4 h-4 text-[#0B6B82] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0" />
-            </svg>
-            <span class="text-[11px] font-medium text-slate-700 leading-snug">
-              Layanan E-Book & Portal Digital aktif 24 jam non-stop
-            </span>
           </div>
         </div>
 
