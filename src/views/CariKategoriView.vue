@@ -549,7 +549,7 @@
           <article
             v-for="buku in paginatedBooks"
             :key="buku.id"
-            class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between group"
+            class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group"
           >
             <div class="space-y-3">
               <!-- COVER BUKU DIGITAL (ABU-ABU NETRAL SESUAI PERMINTAAN USER / SIAP BE) -->

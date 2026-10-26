@@ -228,7 +228,7 @@
         <div 
           v-for="buku in filteredRekomendasi" 
           :key="buku.id"
-          class="bg-white rounded-2xl p-4 border border-slate-100 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between group"
+         class="bg-white rounded-2xl p-4 border border-slate-100 shadow-2xs hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group"
         >
           <!-- Top Row: Cover + Info -->
           <div class="flex items-start gap-3.5">
@@ -344,7 +344,7 @@
         <div 
           v-for="buku in filteredKatalog" 
           :key="buku.id"
-          class="bg-white rounded-3xl p-4 border border-slate-100 shadow-2xs hover:shadow-lg transition-all flex flex-col justify-between group"
+          class="bg-white rounded-3xl p-4 border border-slate-100 shadow-2xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group"
         >
           <!-- Card Top: Cover with floating badges -->
           <div class="relative w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-xs border border-slate-200/80 bg-slate-900 flex flex-col justify-between p-2.5 text-white">
