@@ -26,7 +26,7 @@ Work is done one stage at a time, with a commit after each stage.
 | Stage | Scope | Status | Doc |
 |---|---|---|---|
 | 1 | Foundation: proxy, API client, auth store, router guards, header, login, removals | Done | [stage-1-foundation.md](stage-1-foundation.md) |
-| 2 | Public book pages: catalog, search, detail and reader | Planned | — |
+| 2 | Public book pages: catalog, search, detail and reader | Done | [stage-2-public-books.md](stage-2-public-books.md) |
 | 3 | Archive page | Planned | — |
 | 4 | Staff uploads (`/unggahan`) | Planned | — |
 | 5 | Librarian admin (`/admin/*`) | Planned | — |
