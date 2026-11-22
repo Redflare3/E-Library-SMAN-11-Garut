@@ -4,10 +4,11 @@ import { errorMessage } from '../utils/errors.js'
 export const STAFF_PAGE_SIZE = 10
 
 /**
- * Daftar berhalaman untuk halaman staf (/books/mine, /archive/mine).
+ * Daftar berhalaman untuk halaman staf (/books/mine, /archive/mine) dan admin (/books, /archive).
  * Nomor halaman ada di URL (?page=, mulai dari 1); API memakai 0.
+ * filterKeys (opsional): nama query string yang diteruskan ke fetchPage, mis. ['q', 'categoryId'].
  */
-export function useStaffList({ routeName, fetchPage, route, router, size = STAFF_PAGE_SIZE }) {
+export function useStaffList({ routeName, fetchPage, route, router, size = STAFF_PAGE_SIZE, filterKeys = [] }) {
   const list = reactive({ state: 'loading', items: [], totalElements: 0, totalPages: 0, error: '' })
   let requestId = 0
 
@@ -16,8 +17,38 @@ export function useStaffList({ routeName, fetchPage, route, router, size = STAFF
     return Number.isFinite(p) && p > 1 ? p - 1 : 0
   })
 
+  // Nilai filter dari URL (string atau null)
+  const filters = computed(() => {
+    const out = {}
+    for (const key of filterKeys) {
+      const v = route.query[key]
+      out[key] = typeof v === 'string' && v.trim() ? v.trim() : null
+    }
+    return out
+  })
+
+  function buildQuery(nextFilters, nextPage) {
+    const query = {}
+    for (const key of filterKeys) {
+      const v = nextFilters[key]
+      if (v !== null && v !== undefined && v !== '') query[key] = String(v)
+    }
+    if (nextPage > 0) query.page = String(nextPage + 1)
+    return query
+  }
+
   function setPage(p) {
-    router.push({ name: routeName, query: p > 0 ? { page: String(p + 1) } : {} })
+    router.push({ name: routeName, query: buildQuery(filters.value, p) })
+  }
+
+  // Ubah filter (kembali ke halaman 1). replace: untuk kotak pencarian yang di-debounce
+  function setFilter(patch, { replace = false } = {}) {
+    const target = { name: routeName, query: buildQuery({ ...filters.value, ...patch }, 0) }
+    return replace ? router.replace(target) : router.push(target)
+  }
+
+  function resetFilters() {
+    router.push({ name: routeName, query: {} })
   }
 
   async function loadList() {
@@ -25,7 +56,7 @@ export function useStaffList({ routeName, fetchPage, route, router, size = STAFF
     // Muat ulang diam-diam bila daftar sudah tampil (setelah simpan/hapus)
     if (list.state !== 'ready') list.state = 'loading'
     try {
-      const res = await fetchPage({ page: page.value, size })
+      const res = await fetchPage({ ...filters.value, page: page.value, size })
       if (id !== requestId) return
       // Halaman terakhir kosong setelah hapus → mundur satu halaman
       if (!res.content.length && page.value > 0 && res.totalPages > 0) {
@@ -49,21 +80,23 @@ export function useStaffList({ routeName, fetchPage, route, router, size = STAFF
     if (i >= 0) list.items.splice(i, 1, { ...list.items[i], ...detail })
   }
 
-  // Setelah unggah: item baru ada di urutan pertama halaman 1
+  // Setelah unggah: item baru ada di urutan pertama halaman 1 (urutan terbaru)
   function afterCreate() {
     if (page.value === 0) loadList()
     else setPage(0)
   }
 
+  // Muat ulang saat halaman atau filter di URL berubah
+  const listKey = computed(() => JSON.stringify([page.value, filters.value]))
   watch(
-    () => route.query.page,
+    listKey,
     () => {
       if (route.name !== routeName) return
-      list.state = 'loading' // pindah halaman: tampilkan kerangka
+      list.state = 'loading' // pindah halaman / filter: tampilkan kerangka
       loadList()
     },
     { immediate: true }
   )
 
-  return { list, page, loadList, setPage, replaceItem, afterCreate }
+  return { list, page, filters, loadList, setPage, setFilter, resetFilters, replaceItem, afterCreate }
 }

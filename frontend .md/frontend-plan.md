@@ -29,7 +29,8 @@ Work is done one stage at a time, with a commit after each stage.
 | 2 | Public book pages: catalog, search, detail and reader | Done | [stage-2-public-books.md](stage-2-public-books.md) |
 | 3 | Archive page | Done | [stage-3-archive.md](stage-3-archive.md) |
 | 4 | Staff uploads (`/unggahan`) | Done | [stage-4-staff-uploads.md](stage-4-staff-uploads.md) |
-| 5 | Librarian admin (`/admin/*`) | Planned | — |
+| 5A | Librarian admin, part 1: staff shell for librarians, Statistik, Semua Buku, Semua Arsip, Tempat Sampah | Done | [stage-5a-admin-content.md](stage-5a-admin-content.md) |
+| 5B | Librarian admin, part 2: Pengguna, Kategori, Impor, Penyimpanan | Planned | — |
 
 ## Target routes
 | Path | Access | View |
@@ -145,7 +146,8 @@ Each page keeps its current visual design. Only the mock data changes, to backen
 - **`BukuAdminView` and `ArsipAdminView`**:
   - All items through `GET /books` or `/archive`. The librarian's token makes `STAFF` items appear.
   - Search, filters, edit, delete and upload, reusing the stage 4 forms.
-  - Restore: there is no endpoint that lists trashed items. After a delete, show a toast with an "Urungkan" button that calls `/admin/{books|archive}/{id}/restore`, plus a "Pulihkan berdasarkan ID" field.
+  - Restore: after a delete, show a toast with an "Urungkan" button that calls `/admin/{books|archive}/{id}/restore`.
+- **`SampahView`** (`/admin/sampah`, added after backend phase 9): the trash lists (`/admin/{books|archive}/trash`) with Pulihkan, Hapus Permanen and Kosongkan. See [stage-5a-admin-content.md](stage-5a-admin-content.md).
 - **`PenggunaView`**:
   - A table from `GET /admin/users`.
   - Create: username 3–50 characters, password 6+, full name, role defaulting to `TEACHER`.
@@ -166,7 +168,7 @@ Each page keeps its current visual design. Only the mock data changes, to backen
 
 ## Out of scope (possible follow-ups)
 - The health polling banner (frontend-guide §9).
-- An endpoint that lists trashed items. That needs a backend change, to be raised with the backend.
+- ~~An endpoint that lists trashed items.~~ Delivered by backend phase 9 and used by Tempat Sampah (Stage 5A).
 
 ## Verification
 - `npm run build` passes after each stage, with no leftover imports of deleted files (checked with Grep for `Presensi`, `statistik/`, `BerandaPage` and similar).

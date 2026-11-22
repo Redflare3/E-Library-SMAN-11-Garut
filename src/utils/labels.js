@@ -78,6 +78,29 @@ export function formatEventDate(value) {
   return `${Number(m[3])} ${month} ${m[1]}`
 }
 
+const pad2 = (n) => String(n).padStart(2, '0')
+const toIsoDay = (d) => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`
+
+// n hari kalender terakhir (zona waktu lokal), berakhir hari ini: ['YYYY-MM-DD', ...]
+export function lastNDays(n, today = new Date()) {
+  const days = []
+  for (let i = n - 1; i >= 0; i--) {
+    const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i)
+    days.push(toIsoDay(d))
+  }
+  return days
+}
+
+const SHORT_DAYS_ID = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab']
+
+// "2026-11-17" → "Sel 17/11" (dibangun dari bagian tanggal lokal, tanpa geser UTC)
+export function formatShortDay(value) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value || '')
+  if (!m) return ''
+  const d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]))
+  return `${SHORT_DAYS_ID[d.getDay()]} ${Number(m[3])}/${Number(m[2])}`
+}
+
 // 5 → "0:05", 222 → "3:42", 3730 → "1:02:10"
 export function formatDuration(seconds) {
   if (seconds === null || seconds === undefined || isNaN(seconds) || seconds < 0) return ''
@@ -87,6 +110,14 @@ export function formatDuration(seconds) {
   const s = total % 60
   const pad = (n) => String(n).padStart(2, '0')
   return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${m}:${pad(s)}`
+}
+
+// Instant ISO → "22 Nov 2026, 14.05" (zona waktu lokal)
+export function formatDateTime(iso) {
+  if (!iso) return '—'
+  const d = new Date(iso)
+  if (isNaN(d)) return '—'
+  return d.toLocaleString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
 }
 
 export function formatNumber(n) {

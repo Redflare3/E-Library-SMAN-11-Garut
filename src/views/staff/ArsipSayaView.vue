@@ -103,7 +103,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onBeforeUnmount } from 'vue'
+import { ref } from 'vue'
 import { useRoute, useRouter, onBeforeRouteLeave } from 'vue-router'
 import BaseButton from '../../components/ui/BaseButton.vue'
 import BaseTable from '../../components/ui/BaseTable.vue'
@@ -114,8 +114,9 @@ import ArchiveFormModal from '../../components/staff/ArchiveFormModal.vue'
 import DeleteItemModal from '../../components/staff/DeleteItemModal.vue'
 import RowActions from '../../components/staff/RowActions.vue'
 import VisibilityBadge from '../../components/staff/VisibilityBadge.vue'
-import { listMyArchive, getArchive } from '../../api/archive.js'
+import { listMyArchive } from '../../api/archive.js'
 import { useStaffList } from '../../composables/staffList.js'
+import { useThumbnailPolling } from '../../composables/thumbnailPolling.js'
 import { useToast } from '../../composables/toast.js'
 import { confirmLeaveIfUploading } from '../../composables/uploadTask.js'
 import {
@@ -140,51 +141,7 @@ const { list, page, loadList, setPage, replaceItem, afterCreate } = useStaffList
 onBeforeRouteLeave(() => confirmLeaveIfUploading())
 
 // ---------- Pemrosesan thumbnail (server mengisi width/height beberapa detik setelah unggah) ----------
-const POLL_MS = 2000
-const POLL_LIMIT_MS = 30000
-const processing = reactive({}) // id → true selama dipantau
-const thumbKeys = reactive({}) // id → cache buster ?v=
-const pollTimers = new Map()
-
-function stopPolling(id) {
-  clearTimeout(pollTimers.get(id))
-  pollTimers.delete(id)
-  delete processing[id]
-}
-
-function watchProcessing(detail) {
-  if (!detail || !['IMAGE', 'VIDEO'].includes(detail.mediaType) || detail.width) return
-  const id = detail.id
-  stopPolling(id)
-  processing[id] = true
-  const startedAt = Date.now()
-
-  const tick = async () => {
-    try {
-      const fresh = await getArchive(id)
-      if (fresh.width) {
-        replaceItem(fresh)
-        thumbKeys[id] = Date.now()
-        stopPolling(id)
-        return
-      }
-    } catch (err) {
-      if (err.status === 404) return stopPolling(id) // sudah dihapus
-    }
-    if (Date.now() - startedAt >= POLL_LIMIT_MS) {
-      // Tanpa ffmpeg / gambar sangat besar: biarkan placeholder
-      thumbKeys[id] = Date.now()
-      stopPolling(id)
-      return
-    }
-    pollTimers.set(id, setTimeout(tick, POLL_MS))
-  }
-  pollTimers.set(id, setTimeout(tick, POLL_MS))
-}
-
-onBeforeUnmount(() => {
-  for (const id of [...pollTimers.keys()]) stopPolling(id)
-})
+const { processing, thumbKeys, watchProcessing, stopPolling } = useThumbnailPolling(replaceItem)
 
 // ---------- Modal ----------
 const isFormOpen = ref(false)

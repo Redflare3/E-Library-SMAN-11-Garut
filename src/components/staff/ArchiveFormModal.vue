@@ -39,6 +39,7 @@
           <span class="block text-slate-400">
             {{ labelFor(MEDIA_TYPE_LABELS, original?.mediaType) }} · {{ formatBytes(original?.fileSize) }} · Berkas arsip tidak dapat diganti
           </span>
+          <span class="block text-slate-500 mt-0.5">Diunggah oleh <strong class="font-semibold">{{ original?.uploadedByName || 'Impor massal' }}</strong></span>
         </span>
       </div>
 
