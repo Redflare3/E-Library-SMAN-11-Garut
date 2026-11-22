@@ -25,7 +25,7 @@ Work is done one stage at a time, with a commit after each stage.
 
 | Stage | Scope | Status | Doc |
 |---|---|---|---|
-| 1 | Foundation: proxy, API client, auth store, router guards, header, login, removals | Planned | [stage-1-foundation.md](stage-1-foundation.md) |
+| 1 | Foundation: proxy, API client, auth store, router guards, header, login, removals | Done | [stage-1-foundation.md](stage-1-foundation.md) |
 | 2 | Public book pages: catalog, search, detail and reader | Planned | — |
 | 3 | Archive page | Planned | — |
 | 4 | Staff uploads (`/unggahan`) | Planned | — |
@@ -47,6 +47,8 @@ Work is done one stage at a time, with a commit after each stage.
 `/unggahan` and `/admin/*` share `layouts/StaffLayout.vue`. It has a sidebar whose items are filtered by role, and it uses `meta.hideNavbar` the way the current admin route does.
 
 ## Stage 1: Foundation
+> **Scope as built:** see [stage-1-foundation.md](stage-1-foundation.md). Stage 1 only covers auth. `upload.js`, `media.js`, the `books`/`archive`/`categories`/`meta`/`admin` endpoint modules and the enum and format helpers in `labels.js` are added in the stage that first uses them (2–4). Error messages live in `src/utils/errors.js`. `AdminDashboardView.vue` stays, guarded and with real logout, until stage 5 replaces it.
+
 - **`vite.config.js`**: add `server.proxy: { '/api': { target: 'http://localhost:8081', changeOrigin: true } }`.
 - **`src/api/client.js`**: a `request(path, { method, query, body, form })` wrapper around `fetch`.
   - Adds `Authorization: Bearer` whenever a token exists, on public calls too.

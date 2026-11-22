@@ -34,7 +34,7 @@
             <!-- School Emblem / Avatar Gambar -->
             <img 
               :src="schoolLogo" 
-              alt="Avatar Dra. Hj. Ratna Juwita, M.Pd" 
+              :alt="`Avatar ${auth.state.user?.fullName ?? 'Pustakawan'}`" 
               class="w-full h-full object-contain"
             />
             <!-- Titik Hijau Status Intranet Aktif -->
@@ -45,15 +45,15 @@
           <div class="flex flex-col">
             <div class="flex flex-wrap items-center gap-2.5">
               <h1 class="text-white font-bold text-base sm:text-lg lg:text-xl tracking-tight">
-                Dra. Hj. Ratna Juwita, M.Pd
+                {{ auth.state.user?.fullName }}
               </h1>
               <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider bg-white/10 text-white border border-white/20">
-                ADMINISTRATOR RESMI
+                {{ roleLabel }}
               </span>
             </div>
             
             <div class="flex flex-wrap items-center gap-2 mt-1 text-slate-300 text-xs">
-              <span class="text-slate-300">NIP. 19740512 199802 2 004 • Kepala Unit Perpustakaan SMAN 11 Garut</span>
+              <span class="text-slate-300">@{{ auth.state.user?.username }} • Perpustakaan SMAN 11 Garut</span>
               <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-400 bg-emerald-950/50 px-2 py-0.5 rounded-full border border-emerald-500/30">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
                 Intranet Aktif
@@ -81,7 +81,7 @@
       </section>
 
       <!-- 3. Top Stat Cards (3 Grid Metric Box) -->
-      <section class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <section class="grid grid-cols-1 md:grid-cols-2 gap-5">
         
         <!-- Card 1: Total Judul Terkatalog -->
         <div class="bg-white rounded-3xl p-6 border border-slate-100 shadow-[0_2px_12px_rgba(0,0,0,0.03)] flex flex-col justify-between">
@@ -113,26 +113,6 @@
           </div>
           <div class="mt-4">
             <span class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">342</span>
-          </div>
-        </div>
-
-        <!-- Card 3: Pengunjung Hari Ini -->
-        <div class="bg-white rounded-3xl p-6 border border-slate-100 shadow-[0_2px_12px_rgba(0,0,0,0.03)] flex flex-col justify-between">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-semibold text-slate-500">Pengunjung Hari Ini</span>
-            <!-- User Group Icon -->
-            <div class="w-9 h-9 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center">
-              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                <circle cx="9" cy="7" r="4" />
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-              </svg>
-            </div>
-          </div>
-          <div class="mt-4 flex items-baseline">
-            <span class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">158</span>
-            <span class="text-xs font-semibold text-slate-500 ml-2">Siswa aktif</span>
           </div>
         </div>
 
@@ -756,6 +736,10 @@ import { useRouter } from 'vue-router'
 import schoolLogo from '../../assets/images/placeholders/logo-sman11.svg'
 import EditBukuModal from '../../components/admin/EditBukuModal.vue'
 import DeleteBukuModal from '../../components/admin/DeleteBukuModal.vue'
+import { auth } from '../../stores/auth.js'
+import { ROLE_LABELS } from '../../utils/labels.js'
+
+const roleLabel = computed(() => ROLE_LABELS[auth.state.user?.role] || '')
 
 const router = useRouter()
 
@@ -1001,8 +985,7 @@ const handleConfirmDelete = (bukuId) => {
 
 // Handle Logout / Ganti Akun / Peran
 const handleLogout = () => {
-  localStorage.removeItem('auth_role')
-  localStorage.removeItem('auth_user')
+  auth.logout()
   router.push('/login')
 }
 </script>
