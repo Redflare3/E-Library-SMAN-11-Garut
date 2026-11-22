@@ -1,7 +1,7 @@
 # Plan: Align the E-Library frontend with the backend API
 
 ## Context
-The Vue 3 frontend was built on mock data, before the backend existed. The backend is now finished: all 8 phases in `.md/backend-phases.md` are done. Its contract is in `.md/backend-spec.md` and `frontend-guide.md`, and it differs from the frontend in several ways:
+The Vue 3 frontend was built on mock data, before the backend existed. The backend is now finished: all 9 phases in `.md/backend-phases.md` are done (phase 9, the trash, was added during Stage 5A). Its contract is in `.md/backend-spec.md` and `frontend-guide.md`, and it differs from the frontend in several ways:
 - The frontend has visitor attendance (presensi) and visitor statistics, which the backend doesn't support.
 - The frontend has no archive, upload, users, categories, import or storage features.
 - Login is simulated, and the roles don't match the backend's `TEACHER` and `LIBRARIAN`.
@@ -21,15 +21,16 @@ Decisions the user has already made:
 - Archive is public at `/arsip`.
 
 ## Status
-Work is done one stage at a time, with a commit after each stage.
+Work is done one stage at a time, with a commit after each stage. **All stages are done**: the frontend now covers the whole backend contract, apart from the follow-ups listed under "Out of scope". Each stage doc has an "As built" note where the build differs from its plan.
 
 | Stage | Scope | Status | Doc |
 |---|---|---|---|
-| 1 | Foundation: proxy, API client, auth store, router guards, header, login, removals | Planned | [stage-1-foundation.md](stage-1-foundation.md) |
-| 2 | Public book pages: catalog, search, detail and reader | Planned | — |
-| 3 | Archive page | Planned | — |
-| 4 | Staff uploads (`/unggahan`) | Planned | — |
-| 5 | Librarian admin (`/admin/*`) | Planned | — |
+| 1 | Foundation: proxy, API client, auth store, router guards, header, login, removals | Done | [stage-1-foundation.md](stage-1-foundation.md) |
+| 2 | Public book pages: catalog, search, detail and reader | Done | [stage-2-public-books.md](stage-2-public-books.md) |
+| 3 | Archive page | Done | [stage-3-archive.md](stage-3-archive.md) |
+| 4 | Staff uploads (`/unggahan`) | Done | [stage-4-staff-uploads.md](stage-4-staff-uploads.md) |
+| 5A | Librarian admin, part 1: staff shell for librarians, Statistik, Semua Buku, Semua Arsip, Tempat Sampah | Done | [stage-5a-admin-content.md](stage-5a-admin-content.md) |
+| 5B | Librarian admin, part 2: Pengguna, Kategori, Unggah Massal, Penyimpanan | Done | [stage-5b-admin-system.md](stage-5b-admin-system.md) |
 
 ## Target routes
 | Path | Access | View |
@@ -39,14 +40,18 @@ Work is done one stage at a time, with a commit after each stage.
 | `/buku/:id` | public | `DetailBukuView`: metadata, reader, download, related books |
 | `/arsip` | public | `ArsipView` (new): thumbnail grid, filters, lightbox |
 | `/login` | guests only | `LoginView`: one staff form, redirects by role |
-| `/unggahan` | TEACHER, LIBRARIAN | `staff/UnggahanSayaView` (new): my books and archive items, with upload, edit and delete |
-| `/admin` → `/admin/statistik` | LIBRARIAN | `admin/StatistikView` (new) |
-| `/admin/buku`, `/admin/arsip` | LIBRARIAN | manage all items, upload, restore |
-| `/admin/pengguna`, `/admin/kategori`, `/admin/impor`, `/admin/penyimpanan` | LIBRARIAN | new admin screens |
+| `/unggahan` → `/unggahan/buku`, `/unggahan/arsip` | TEACHER, LIBRARIAN | `staff/BukuSayaView`, `staff/ArsipSayaView`: my books and archive items, with upload, edit and delete |
+| `/admin` → `/admin/statistik` (also `/admin/dashboard`) | LIBRARIAN | `admin/StatistikView` |
+| `/admin/buku`, `/admin/arsip` | LIBRARIAN | `admin/BukuAdminView`, `admin/ArsipAdminView`: all items, upload, edit, delete with Urungkan |
+| `/admin/pengguna`, `/admin/kategori` | LIBRARIAN | `admin/PenggunaView`, `admin/KategoriView` |
+| `/admin/impor` | LIBRARIAN | `admin/ImporView` (sidebar "Unggah Massal"): browser bulk upload |
+| `/admin/penyimpanan`, `/admin/sampah` | LIBRARIAN | `admin/PenyimpananView`, `admin/SampahView` (Tempat Sampah) |
 
-`/unggahan` and `/admin/*` share `layouts/StaffLayout.vue`. It has a sidebar whose items are filtered by role, and it uses `meta.hideNavbar` the way the current admin route does.
+`/unggahan` and `/admin/*` share `layouts/StaffLayout.vue` (`meta.hideNavbar`, no public header or footer). Its sidebar has the "Unggahan Saya" group for all staff and the librarian-only "Pengelolaan" group: Statistik, Semua Buku, Semua Arsip, Pengguna, Kategori, Unggah Massal, Penyimpanan, Tempat Sampah.
 
 ## Stage 1: Foundation
+> **Scope as built:** see [stage-1-foundation.md](stage-1-foundation.md). Stage 1 only covers auth. `upload.js`, `media.js`, the `books`/`archive`/`categories`/`meta`/`admin` endpoint modules and the enum and format helpers in `labels.js` are added in the stage that first uses them (2–4). Error messages live in `src/utils/errors.js`. `AdminDashboardView.vue` stayed, guarded and with real logout, until Stage 5A replaced it and deleted it.
+
 - **`vite.config.js`**: add `server.proxy: { '/api': { target: 'http://localhost:8081', changeOrigin: true } }`.
 - **`src/api/client.js`**: a `request(path, { method, query, body, form })` wrapper around `fetch`.
   - Adds `Authorization: Bearer` whenever a token exists, on public calls too.
@@ -143,7 +148,8 @@ Each page keeps its current visual design. Only the mock data changes, to backen
 - **`BukuAdminView` and `ArsipAdminView`**:
   - All items through `GET /books` or `/archive`. The librarian's token makes `STAFF` items appear.
   - Search, filters, edit, delete and upload, reusing the stage 4 forms.
-  - Restore: there is no endpoint that lists trashed items. After a delete, show a toast with an "Urungkan" button that calls `/admin/{books|archive}/{id}/restore`, plus a "Pulihkan berdasarkan ID" field.
+  - Restore: after a delete, show a toast with an "Urungkan" button that calls `/admin/{books|archive}/{id}/restore`.
+- **`SampahView`** (`/admin/sampah`, added after backend phase 9): the trash lists (`/admin/{books|archive}/trash`) with Pulihkan, Hapus Permanen and Kosongkan. See [stage-5a-admin-content.md](stage-5a-admin-content.md).
 - **`PenggunaView`**:
   - A table from `GET /admin/users`.
   - Create: username 3–50 characters, password 6+, full name, role defaulting to `TEACHER`.
@@ -153,18 +159,17 @@ Each page keeps its current visual design. Only the mock data changes, to backen
   - A BOOK/ARCHIVE toggle and the tree, with create, rename and delete.
   - Archive categories add `?type=ARCHIVE` to `PUT` and `DELETE`.
   - Handles `CATEGORY_IN_USE`, `DUPLICATE_CATEGORY` and `INVALID_PARENT`.
-- **`ImporView`**:
-  - BOOK and ARCHIVE buttons call `POST /admin/import`. While a job is `RUNNING`, it polls `/admin/import/{id}` every 2 s.
-  - Shows succeeded, skipped and failed counts, the error list, and the 20 most recent jobs.
-  - `IMPORT_ALREADY_RUNNING` opens the running job instead.
-  - Includes a short CSV format guide from spec §5.5.
+- **`ImporView`** (sidebar "Unggah Massal"): browser bulk upload. Many files become editable rows with shared metadata and upload one by one through `POST /books` or `/archive`. The backend's server-folder CSV import (`/admin/import`) is intentionally not used in the admin panel. See [stage-5b-admin-system.md](stage-5b-admin-system.md).
 - **`PenyimpananView`**:
   - A disk bar of free space against `minFreeBytes`. When `available` is false, it shows "Drive tidak terhubung" instead.
   - A table of book and archive buckets by media type, with active and trash counts and sizes, plus thumbnail and temp sizes.
 
 ## Out of scope (possible follow-ups)
 - The health polling banner (frontend-guide §9).
-- An endpoint that lists trashed items. That needs a backend change, to be raised with the backend.
+- The backend's server-folder CSV import (`/admin/import`, phase 6). Left out of the admin panel on purpose (Stage 5B); Unggah Massal covers the same need from the browser.
+- **Backend:** reject category cycles. `PUT /admin/categories/{id}` only refuses a category as its own parent, and accepts a parent placed under its own child. The admin UI already prevents it (Stage 5B).
+- **Backend:** there's no endpoint to replace a book cover or an archive file, so the edit forms say these can't be changed.
+- ~~An endpoint that lists trashed items.~~ Delivered by backend phase 9 and used by Tempat Sampah (Stage 5A).
 
 ## Verification
 - `npm run build` passes after each stage, with no leftover imports of deleted files (checked with Grep for `Presensi`, `statistik/`, `BerandaPage` and similar).
@@ -173,8 +178,8 @@ Each page keeps its current visual design. Only the mock data changes, to backen
   2. **Login as `admin` / `admin123`:**
      - A wrong password shows the error. 5 wrong passwords show the lockout message.
      - A successful login lands on `/admin/statistik` with real numbers.
-     - Create a `TEACHER` user, create categories, and upload a book (with a cover) and a video (thumbnail appears after a reload).
-     - Upload the same file again → duplicate error. Delete, then undo → item restored. Run an import. Storage shows data.
+     - Create a `TEACHER` user, create categories, and upload a book (with a cover) and a video (the thumbnail appears without a reload).
+     - Upload the same file again → duplicate error. Delete, then undo → item restored; delete again and purge it in Tempat Sampah. Upload a batch in Unggah Massal. Storage shows data.
   3. **Login as the teacher:**
      - Lands on `/unggahan`, and `/admin` redirects away.
      - Can upload and edit their own items.

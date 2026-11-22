@@ -7,4 +7,13 @@ export default defineConfig({
     vue(),
     tailwindcss(),
   ],
+  server: {
+    // Backend Spring Boot (dev profile). Di produksi Nginx yang mem-proxy /api.
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8081',
+        changeOrigin: true,
+      },
+    },
+  },
 })

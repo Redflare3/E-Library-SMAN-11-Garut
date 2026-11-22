@@ -1,17 +1,23 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { auth } from '../stores/auth.js'
 
 // Views - Lazy-loaded untuk optimasi rendering modular
-const BerandaPage = () => import('../views/BerandaPage.vue')
+const KatalogView = () => import('../views/KatalogView.vue')
 const CariKategoriView = () => import('../views/CariKategoriView.vue')
 const DetailBukuView = () => import('../views/DetailBukuView.vue')
-const PresensiPage = () => import('../views/PresensiPage.vue')
-const StatistikHarianView = () => import('../views/statistik/StatistikHarianView.vue')
-const StatistikMingguanView = () => import('../views/statistik/StatistikMingguanView.vue')
-const StatistikBulananView = () => import('../views/statistik/StatistikBulananView.vue')
-const AdminDashboardPage = () => import('../views/admin/AdminDashboardPage.vue')
-const AdminDashboardView = () => import('../views/admin/AdminDashboardView.vue')
+const ArsipView = () => import('../views/ArsipView.vue')
 const LoginView = () => import('../views/auth/LoginView.vue')
-const KatalogView = () => import('../views/KatalogView.vue')
+const StaffLayout = () => import('../layouts/StaffLayout.vue')
+const BukuSayaView = () => import('../views/staff/BukuSayaView.vue')
+const ArsipSayaView = () => import('../views/staff/ArsipSayaView.vue')
+const StatistikView = () => import('../views/admin/StatistikView.vue')
+const BukuAdminView = () => import('../views/admin/BukuAdminView.vue')
+const ArsipAdminView = () => import('../views/admin/ArsipAdminView.vue')
+const SampahView = () => import('../views/admin/SampahView.vue')
+const PenggunaView = () => import('../views/admin/PenggunaView.vue')
+const KategoriView = () => import('../views/admin/KategoriView.vue')
+const ImporView = () => import('../views/admin/ImporView.vue')
+const PenyimpananView = () => import('../views/admin/PenyimpananView.vue')
 
 const routes = [
   {
@@ -19,8 +25,9 @@ const routes = [
     name: 'Login',
     component: LoginView,
     meta: {
-      title: 'Portal Autentikasi Pengurus - E-Library SMAN 11 Garut',
-      hideNavbar: true
+      title: 'Masuk Staf - E-Library SMAN 11 Garut',
+      hideNavbar: true,
+      guestOnly: true
     }
   },
   {
@@ -34,14 +41,6 @@ const routes = [
   {
     path: '/katalog',
     redirect: '/'
-  },
-  {
-    path: '/presensi',
-    name: 'Presensi',
-    component: PresensiPage,
-    meta: {
-      title: 'E-Library SMAN 11 Garut - Presensi Mandiri Pengunjung'
-    }
   },
   {
     path: '/kategori',
@@ -61,45 +60,100 @@ const routes = [
     }
   },
   {
-    path: '/statistik',
-    redirect: '/statistik/harian'
-  },
-  {
-    path: '/statistik/harian',
-    name: 'StatistikHarian',
-    component: StatistikHarianView,
+    path: '/arsip',
+    name: 'Arsip',
+    component: ArsipView,
     meta: {
-      title: 'Statistik & Presensi Pengunjung - E-Library SMAN 11 Garut'
+      title: 'Arsip Sekolah - E-Library SMAN 11 Garut'
     }
   },
+  // Area staf (guru & pustakawan): layout sidebar sendiri, tanpa header/footer publik
   {
-    path: '/statistik/mingguan',
-    name: 'StatistikMingguan',
-    component: StatistikMingguanView,
+    path: '/unggahan',
+    component: StaffLayout,
     meta: {
-      title: 'Visualisasi Linear Tren Kunjungan - E-Library SMAN 11 Garut'
-    }
-  },
-  {
-    path: '/statistik/bulanan',
-    name: 'StatistikBulanan',
-    component: StatistikBulananView,
-    meta: {
-      title: 'Visualisasi Linear Tren Kunjungan Bulanan - E-Library SMAN 11 Garut'
-    }
-  },
-  {
-    path: '/admin/dashboard',
-    name: 'AdminDashboard',
-    component: AdminDashboardView,
-    meta: {
-      title: 'Panel Pengelola Perpustakaan - SMAN 11 Garut',
+      requiresAuth: true,
+      roles: ['TEACHER', 'LIBRARIAN'],
       hideNavbar: true
-    }
+    },
+    children: [
+      { path: '', redirect: { name: 'BukuSaya' } },
+      {
+        path: 'buku',
+        name: 'BukuSaya',
+        component: BukuSayaView,
+        meta: { title: 'Buku Saya - E-Library SMAN 11 Garut' }
+      },
+      {
+        path: 'arsip',
+        name: 'ArsipSaya',
+        component: ArsipSayaView,
+        meta: { title: 'Arsip Saya - E-Library SMAN 11 Garut' }
+      }
+    ]
   },
+  // Pengelolaan pustakawan: layout staf yang sama, menu "Pengelolaan" di sidebar
   {
     path: '/admin',
-    redirect: '/admin/dashboard'
+    component: StaffLayout,
+    meta: {
+      requiresAuth: true,
+      roles: ['LIBRARIAN'],
+      hideNavbar: true
+    },
+    children: [
+      { path: '', redirect: { name: 'AdminStatistik' } },
+      // Tautan lama (dasbor mock sebelum Tahap 5A)
+      { path: 'dashboard', redirect: { name: 'AdminStatistik' } },
+      {
+        path: 'statistik',
+        name: 'AdminStatistik',
+        component: StatistikView,
+        meta: { title: 'Statistik - Panel Pustakawan' }
+      },
+      {
+        path: 'buku',
+        name: 'AdminBuku',
+        component: BukuAdminView,
+        meta: { title: 'Semua Buku - Panel Pustakawan' }
+      },
+      {
+        path: 'arsip',
+        name: 'AdminArsip',
+        component: ArsipAdminView,
+        meta: { title: 'Semua Arsip - Panel Pustakawan' }
+      },
+      {
+        path: 'sampah',
+        name: 'AdminSampah',
+        component: SampahView,
+        meta: { title: 'Tempat Sampah - Panel Pustakawan' }
+      },
+      {
+        path: 'pengguna',
+        name: 'AdminPengguna',
+        component: PenggunaView,
+        meta: { title: 'Pengguna - Panel Pustakawan' }
+      },
+      {
+        path: 'kategori',
+        name: 'AdminKategori',
+        component: KategoriView,
+        meta: { title: 'Kategori - Panel Pustakawan' }
+      },
+      {
+        path: 'impor',
+        name: 'AdminImpor',
+        component: ImporView,
+        meta: { title: 'Unggah Massal - Panel Pustakawan' }
+      },
+      {
+        path: 'penyimpanan',
+        name: 'AdminPenyimpanan',
+        component: PenyimpananView,
+        meta: { title: 'Penyimpanan - Panel Pustakawan' }
+      }
+    ]
   },
   // Fallback Wildcard Route (404)
   {
@@ -108,6 +162,11 @@ const routes = [
   }
 ]
 
+function onlyItemChanged(a, b) {
+  const strip = ({ item, ...rest }) => JSON.stringify(Object.entries(rest).sort())
+  return strip(a) === strip(b)
+}
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
@@ -115,8 +174,33 @@ const router = createRouter({
     if (savedPosition) {
       return savedPosition
     }
+    // Buka/tutup/geser lightbox arsip (?item=) tidak menggulir halaman
+    if (to.path === from.path && onlyItemChanged(to.query, from.query)) {
+      return false
+    }
     return { top: 0, behavior: 'smooth' }
   }
+})
+
+// Guard akses: tunggu sesi dipulihkan, lalu cek login & peran
+router.beforeEach(async (to) => {
+  await auth.init()
+
+  const loggedIn = auth.isLoggedIn.value
+
+  if (to.meta.guestOnly && loggedIn) {
+    return auth.homePath()
+  }
+
+  if (to.meta.requiresAuth && !loggedIn) {
+    return { name: 'Login', query: { redirect: to.fullPath } }
+  }
+
+  if (to.meta.roles && !to.meta.roles.includes(auth.state.user?.role)) {
+    return auth.homePath()
+  }
+
+  return true
 })
 
 // Navigation Guard untuk memperbarui judul dokumen secara offline

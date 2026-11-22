@@ -25,18 +25,17 @@
 
         <!-- Action Buttons -->
         <div class="flex flex-wrap items-center gap-3 pt-1">
-          <!-- Button Presensi Mandiri Hari Ini -->
+          <!-- Button Jelajahi Koleksi -->
           <router-link
-            to="/presensi"
+            to="/kategori"
             class="px-5 py-3 rounded-xl bg-[#005B70] hover:bg-[#004859] active:bg-[#003845] text-white font-bold text-xs sm:text-sm shadow-sm transition-all flex items-center gap-2 cursor-pointer"
           >
-            <!-- User Check-in Icon -->
+            <!-- Search Icon -->
             <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-              <circle cx="11" cy="7" r="4" />
-              <polyline points="17 11 19 13 23 9" />
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
-            <span>Presensi Mandiri Hari Ini</span>
+            <span>Jelajahi Koleksi</span>
           </router-link>
 
           <!-- Button Panduan Baca E-Book -->
@@ -66,10 +65,10 @@
             </div>
             <div>
               <div class="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight leading-none">
-                4.800+
+                {{ stats.books }}
               </div>
               <div class="text-[11px] text-slate-400 font-medium mt-1">
-                Buku Teks &amp; Digital
+                Judul Koleksi Digital
               </div>
             </div>
           </div>
@@ -86,10 +85,10 @@
             </div>
             <div>
               <div class="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight leading-none">
-                28
+                {{ stats.categories }}
               </div>
               <div class="text-[11px] text-slate-400 font-medium mt-1">
-                Kategori Merdeka
+                Kategori Koleksi
               </div>
             </div>
           </div>
@@ -153,11 +152,11 @@
             <!-- Banner Bottom Metadata -->
             <div class="flex items-center justify-between text-[10px] text-cyan-100/90 pt-1 border-t border-white/10 relative z-10">
               <div>
-                Petugas Bertugas: <span class="font-semibold text-white">Siti Rohmah, S.I.Pust</span>
+                Akses melalui <span class="font-semibold text-white">Wi-Fi sekolah</span>
               </div>
               <div class="flex items-center gap-1 text-emerald-300 font-semibold">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>Ruang Baca Buka</span>
+                <span>Koleksi digital aktif</span>
               </div>
             </div>
           </div>
@@ -173,10 +172,10 @@
           </div>
           <div>
             <div class="text-xs font-bold text-slate-900 leading-snug">
-              Sinkronisasi Dapodik &amp; Kurikulum Merdeka
+              Kurikulum Merdeka &amp; K13
             </div>
             <div class="text-[11px] text-slate-400 mt-0.5">
-              Update koleksi edisi revisi terbaru 2024/2025
+              Koleksi diunggah oleh guru &amp; pustakawan
             </div>
           </div>
         </div>
@@ -184,95 +183,82 @@
 
     </section>
 
-    <!-- 2. SECTION: BUKU PILIHAN KURIKULUM MERDEKA (FASE E & F) -->
+    <!-- 2. SECTION: BUKU TERPOPULER (FILTER KELAS) -->
     <section class="space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
         <div>
-          <!-- Rekomendasi Wajib Guru Pill Header -->
           <div class="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#005B70] uppercase tracking-wider mb-1">
             <svg class="w-4 h-4 text-[#005B70]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
               <polyline points="22 4 12 14.01 9 11.01" />
             </svg>
-            <span>REKOMENDASI WAJIB GURU</span>
+            <span>PALING BANYAK DIUNDUH</span>
           </div>
           <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
-            Buku Pilihan Kurikulum Merdeka (Fase E &amp; F)
+            Buku Terpopuler
           </h2>
           <p class="text-xs text-slate-400 mt-0.5">
-            Buku teks induk dan pegangan asesmen nasional yang disesuaikan dengan kurikulum 2024/2025.
+            Koleksi yang paling sering diunduh siswa dan guru SMAN 11 Garut.
           </p>
         </div>
 
-        <!-- Filter Pills Kanan -->
+        <!-- Filter Pills Kelas -->
         <div class="flex items-center gap-1.5 self-start sm:self-auto overflow-x-auto pb-1 scrollbar-none">
           <button
-            v-for="pill in rekomendasiPills"
-            :key="pill"
+            v-for="pill in gradePills"
+            :key="pill.value || 'all'"
             type="button"
             :class="[
               'px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer',
-              activeRekomendasi === pill
+              activeGrade === pill.value
                 ? 'bg-[#005B70] text-white shadow-2xs'
                 : 'bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200/70'
             ]"
-            @click="activeRekomendasi = pill"
+            @click="activeGrade = pill.value"
           >
-            {{ pill }}
+            {{ pill.label }}
           </button>
         </div>
       </div>
 
+      <StateBlock
+        v-if="popular.state !== 'ready'"
+        :state="popular.state"
+        :title="popular.state === 'error' ? 'Gagal memuat buku terpopuler' : 'Belum ada buku untuk kelas ini'"
+        :message="popular.state === 'error' ? popular.error : ''"
+        :skeleton-count="3"
+        grid-class="grid-cols-1 md:grid-cols-3"
+        @retry="loadPopular"
+      />
+
       <!-- 3 Grid Book Card Horizontal Layout -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 pt-1">
-        <div 
-          v-for="buku in filteredRekomendasi" 
+      <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-5 pt-1">
+        <div
+          v-for="buku in popular.items"
           :key="buku.id"
-         class="bg-white rounded-2xl p-4 border border-slate-100 shadow-2xs hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group"
+          class="bg-white rounded-2xl p-4 border border-slate-100 shadow-2xs hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group"
         >
           <!-- Top Row: Cover + Info -->
           <div class="flex items-start gap-3.5">
             <!-- Cover Book Thumbnail -->
-            <div class="w-20 h-28 rounded-xl overflow-hidden shadow-xs border border-slate-200/90 shrink-0 relative bg-slate-900 flex flex-col justify-between p-1.5 text-white">
-              <img 
-                v-if="buku.coverUrl" 
-                :src="buku.coverUrl" 
-                :alt="buku.title" 
-                class="w-full h-full object-cover rounded-lg"
-              />
-              <div 
-                v-else 
-                :class="['h-full w-full rounded-lg p-1.5 flex flex-col justify-between text-center relative overflow-hidden', buku.coverGradient]"
-              >
-                <!-- Badge Fase di Kover -->
-                <span class="inline-block self-start text-[6px] font-bold px-1 py-0.5 rounded bg-black/40 text-cyan-200 uppercase">
-                  {{ buku.faseLabel }}
-                </span>
-                <div class="my-auto">
-                  <div class="text-[8px] font-extrabold uppercase leading-tight line-clamp-2">
-                    {{ buku.shortTitle }}
-                  </div>
-                </div>
-                <div class="text-[5px] text-white/70">
-                  SMAN 11 GARUT
-                </div>
-              </div>
+            <div class="w-20 h-28 rounded-xl overflow-hidden shadow-xs border border-slate-200/90 shrink-0 relative bg-slate-900">
+              <BookCover :book="buku" compact />
             </div>
 
             <!-- Info Bibliografi -->
             <div class="flex-1 min-w-0">
-              <span :class="['inline-block px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider', buku.badgeClass]">
-                {{ buku.badgeText }}
+              <span class="inline-block px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700">
+                {{ [labelFor(BOOK_TYPE_LABELS, buku.bookType), buku.categoryName].filter(Boolean).join(' • ') }}
               </span>
               <h3 class="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-[#005B70] transition-colors line-clamp-2 mt-1 leading-snug">
                 {{ buku.title }}
               </h3>
-              <p class="text-[10px] text-slate-400 mt-1 line-clamp-1">
+              <p v-if="buku.author" class="text-[10px] text-slate-400 mt-1 line-clamp-1">
                 {{ buku.author }}
               </p>
               <div class="text-[10px] text-emerald-600 font-semibold mt-2 flex items-center gap-1">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                <span>{{ buku.stockInfo }}</span>
+                <span>{{ formatNumber(buku.downloadCount) }}× diunduh</span>
               </div>
             </div>
           </div>
@@ -303,7 +289,7 @@
     </section>
 
     <!-- 3. SECTION: KATALOG LENGKAP KOLEKSI (MAIN BOOK GRID) -->
-    <section class="space-y-5">
+    <section id="katalog-lengkap" class="space-y-5 scroll-mt-24">
       <!-- Section Header -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
@@ -311,89 +297,77 @@
             Katalog Lengkap Koleksi
           </h2>
           <p class="text-xs text-slate-400 mt-0.5">
-            Jelajahi buku teks resmi, novel sastra, karya ilmiah siswa, dan referensi umum.
+            Koleksi terbaru: buku teks, modul ajar, bank soal, dan bahan presentasi.
           </p>
         </div>
 
         <!-- Total Count Badge -->
-        <div class="self-start sm:self-auto inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200/60">
-          Menampilkan {{ filteredKatalog.length }} dari 4.812 judul buku
+        <div
+          v-if="catalog.state === 'ready'"
+          class="self-start sm:self-auto inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200/60"
+        >
+          Menampilkan {{ catalog.items.length }} dari {{ formatNumber(catalog.totalElements) }} judul
         </div>
       </div>
 
       <!-- Category Filter Pills (Horizontal Scrollable) -->
       <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
         <button
-          v-for="cat in kategoriPills"
-          :key="cat"
+          v-for="cat in categoryPills"
+          :key="cat.id ?? 'all'"
           type="button"
           :class="[
             'px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer',
-            activeKategori === cat
+            activeCategoryId === cat.id
               ? 'bg-[#005B70] text-white shadow-2xs'
               : 'bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200/70'
           ]"
-          @click="activeKategori = cat"
+          @click="selectCategory(cat.id)"
         >
-          {{ cat }}
+          {{ cat.name }}
         </button>
       </div>
 
+      <StateBlock
+        v-if="catalog.state !== 'ready'"
+        :state="catalog.state"
+        :title="catalog.state === 'error' ? 'Gagal memuat katalog' : 'Belum ada buku di kategori ini'"
+        :message="catalog.state === 'error' ? catalog.error : ''"
+        :skeleton-count="8"
+        :reset-label="activeCategoryId !== null ? 'Tampilkan Semua Kategori' : ''"
+        @retry="loadCatalog"
+        @reset="selectCategory(null)"
+      />
+
       <!-- 4 Column Grid Book Cards (Responsive 2 Col Mobile / 4 Col Desktop) -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 pt-1">
-        <div 
-          v-for="buku in filteredKatalog" 
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 pt-1">
+        <div
+          v-for="buku in catalog.items"
           :key="buku.id"
           class="bg-white rounded-3xl p-4 border border-slate-100 shadow-2xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group"
         >
           <!-- Card Top: Cover with floating badges -->
           <div class="relative w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-xs border border-slate-200/80 bg-slate-900 flex flex-col justify-between p-2.5 text-white">
-            
-            <!-- Floating Top Badges (Dewey & Fase) -->
-            <div class="flex items-center justify-between relative z-10">
-              <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-white/90 text-slate-800 shadow-xs backdrop-blur-xs">
-                {{ buku.deweyCode }}
+            <BookCover :book="buku" />
+
+            <!-- Floating Top Badges (Jenis & Kelas) -->
+            <div class="flex items-center justify-between gap-1 relative z-10">
+              <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-white/90 text-slate-800 shadow-xs backdrop-blur-xs">
+                {{ labelFor(BOOK_TYPE_LABELS, buku.bookType) }}
               </span>
-              <span :class="['inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold text-white shadow-xs', buku.faseBadgeClass]">
-                {{ buku.faseText }}
+              <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold text-white shadow-xs bg-blue-600">
+                {{ labelFor(GRADE_LABELS, buku.gradeLevel) }}
               </span>
             </div>
 
-            <!-- Styled Cover Graphic (or dynamic image) -->
-            <img 
-              v-if="buku.coverUrl" 
-              :src="buku.coverUrl" 
-              :alt="buku.title" 
-              class="absolute inset-0 w-full h-full object-cover"
-            />
-            <div 
-              v-else 
-              :class="['absolute inset-0 flex flex-col justify-between p-3 text-center', buku.coverGradient]"
-            >
-              <div class="pt-6">
-                <span class="text-[8px] tracking-widest text-white/80 uppercase font-mono">EDISI REVISI</span>
-                <div class="text-sm font-extrabold uppercase mt-1 leading-tight text-white drop-shadow-xs">
-                  {{ buku.shortTitle }}
-                </div>
-              </div>
-              
-              <!-- Subtle Abstract Icon in Center -->
-              <div class="w-12 h-12 mx-auto my-auto rounded-full bg-white/10 flex items-center justify-center border border-white/20">
-                <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                </svg>
-              </div>
-
-              <div class="pb-6 text-[7px] text-white/70 uppercase tracking-wider">
-                SMAN 11 GARUT • REPOSITORI
-              </div>
-            </div>
-
-            <!-- Floating Availability Pill at Bottom of Cover -->
+            <!-- Floating Pill: Khusus Staf -->
             <div class="relative z-10 flex justify-center -mb-1">
-              <span :class="['inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold shadow-md', buku.stockBadgeClass]">
-                <span :class="['w-1.5 h-1.5 rounded-full', buku.stockDotClass]"></span>
-                <span>{{ buku.stockBadgeText }}</span>
+              <span
+                v-if="buku.visibility === 'STAFF'"
+                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold shadow-md bg-amber-50 text-amber-700 border border-amber-200/90"
+              >
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                <span>{{ VISIBILITY_LABELS.STAFF }}</span>
               </span>
             </div>
           </div>
@@ -401,14 +375,14 @@
           <!-- Card Content: Metadata -->
           <div class="pt-3.5 space-y-1 flex-1 flex flex-col justify-between">
             <div>
-              <div class="text-[10px] font-bold tracking-wider text-slate-400 uppercase">
-                {{ buku.subCategory }}
+              <div v-if="buku.categoryName" class="text-[10px] font-bold tracking-wider text-slate-400 uppercase">
+                {{ buku.categoryName }}
               </div>
               <h3 class="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-[#005B70] transition-colors line-clamp-2 mt-0.5 leading-snug">
                 {{ buku.title }}
               </h3>
-              <p class="text-[11px] text-slate-500 mt-1 line-clamp-1">
-                {{ buku.author }} ({{ buku.year }})
+              <p v-if="authorLine(buku)" class="text-[11px] text-slate-500 mt-1 line-clamp-1">
+                {{ authorLine(buku) }}
               </p>
             </div>
 
@@ -416,7 +390,7 @@
               <svg class="w-3.5 h-3.5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
               </svg>
-              <span>{{ buku.pages }}</span>
+              <span>{{ buku.curriculum || labelFor(BOOK_TYPE_LABELS, buku.bookType) }}</span>
             </div>
           </div>
 
@@ -441,56 +415,18 @@
               <span>Baca</span>
             </button>
           </div>
-
         </div>
       </div>
 
-      <!-- Pagination Bar Sesuai Figma -->
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-6 text-xs text-slate-400 border-t border-slate-100">
+      <!-- Pagination Bar -->
+      <div
+        v-if="catalog.state === 'ready' && catalog.totalPages > 1"
+        class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-6 text-xs text-slate-400 border-t border-slate-100"
+      >
         <div>
-          Menampilkan Halaman 1 dari 162 • Total 4.812 Karya E-Book Perpustakaan SMAN 11 Garut
+          Halaman {{ catalogPage + 1 }} dari {{ catalog.totalPages }} • Total {{ formatNumber(catalog.totalElements) }} judul
         </div>
-
-        <div class="flex items-center gap-1.5">
-          <!-- Prev Button -->
-          <button 
-            type="button" 
-            class="w-7 h-7 rounded-lg border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-50 cursor-pointer disabled:opacity-40"
-            disabled
-          >
-            ‹
-          </button>
-
-          <!-- Page 1 Active -->
-          <button type="button" class="w-7 h-7 rounded-lg bg-[#005B70] text-white font-bold flex items-center justify-center cursor-pointer shadow-xs">
-            1
-          </button>
-
-          <!-- Page 2 -->
-          <button type="button" class="w-7 h-7 rounded-lg hover:bg-slate-100 text-slate-600 font-medium flex items-center justify-center cursor-pointer">
-            2
-          </button>
-
-          <!-- Page 3 -->
-          <button type="button" class="w-7 h-7 rounded-lg hover:bg-slate-100 text-slate-600 font-medium flex items-center justify-center cursor-pointer">
-            3
-          </button>
-
-          <span class="px-1 text-slate-400">...</span>
-
-          <!-- Page 162 -->
-          <button type="button" class="w-7 h-7 rounded-lg hover:bg-slate-100 text-slate-600 font-medium flex items-center justify-center cursor-pointer">
-            162
-          </button>
-
-          <!-- Next Button -->
-          <button 
-            type="button" 
-            class="w-7 h-7 rounded-lg border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-50 cursor-pointer"
-          >
-            ›
-          </button>
-        </div>
+        <Pagination :page="catalogPage" :total-pages="catalog.totalPages" @update:page="changeCatalogPage" />
       </div>
     </section>
 
@@ -498,227 +434,131 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, reactive, computed, watch, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import BookCover from '../components/BookCover.vue'
+import Pagination from '../components/Pagination.vue'
+import StateBlock from '../components/StateBlock.vue'
+import { listBooks } from '../api/books.js'
+import { listCategories, flattenCategories } from '../api/categories.js'
+import { getFilters } from '../api/meta.js'
+import { errorMessage } from '../utils/errors.js'
+import {
+  BOOK_TYPE_LABELS,
+  GRADE_LABELS,
+  VISIBILITY_LABELS,
+  labelFor,
+  formatNumber
+} from '../utils/labels.js'
 
 const router = useRouter()
 
-// 1. Rekomendasi Section Filters
-const activeRekomendasi = ref('Semua')
-const rekomendasiPills = ['Semua', 'Kelas X (Fase E)', 'Kelas XI & XII (Fase F)']
+const POPULAR_SIZE = 3
+const CATALOG_SIZE = 8
 
-// Mock Data: Buku Pilihan Kurikulum Merdeka (Fase E & F)
-const rekomendasiBuku = ref([
-  {
-    id: 'rek-1',
-    title: 'Fisika Terapan & Energi Berkelanjutan',
-    shortTitle: 'Fisika Terapan',
-    author: 'Dr. Bambang H., M.Si — Pusat Perbukuan Kemendikbudristek',
-    fase: 'Kelas XI & XII (Fase F)',
-    faseLabel: 'Fase F',
-    badgeText: 'SAINS & TERAPAN • 530',
-    badgeClass: 'bg-blue-50 text-blue-700',
-    stockInfo: 'Tersedia: 14 Cetak + E-Book Aktif',
-    coverGradient: 'bg-gradient-to-br from-[#0c2340] to-[#103b6e]',
-    coverUrl: null
-  },
-  {
-    id: 'rek-2',
-    title: 'Informatika: Berpikir Komputasional & Python',
-    shortTitle: 'Informatika',
-    author: 'Iya Wiranata, Ph.D — Kurikulum Merdeka',
-    fase: 'Kelas X (Fase E)',
-    faseLabel: 'Fase E',
-    badgeText: 'KOMPUTASI • 004',
-    badgeClass: 'bg-sky-50 text-sky-700',
-    stockInfo: 'Tersedia: 22 Cetak + E-Book Aktif',
-    coverGradient: 'bg-gradient-to-br from-[#07243b] to-[#0d4f80]',
-    coverUrl: null
-  },
-  {
-    id: 'rek-3',
-    title: 'Rancage Diajar Basa Sunda pikeun Murid SMA',
-    shortTitle: 'Basa Sunda',
-    author: 'Drs. Yayat Sudaryat, M.Hum — Disdik Jabar',
-    fase: 'Kelas X (Fase E)',
-    faseLabel: 'Muatan Lokal',
-    badgeText: 'BAHASA & BUDAYA • 499',
-    badgeClass: 'bg-amber-50 text-amber-800',
-    stockInfo: 'Tersedia: 30 Cetak + E-Book Aktif',
-    coverGradient: 'bg-gradient-to-br from-[#3b2408] to-[#784d14]',
-    coverUrl: null
-  }
+// Statistik hero
+const stats = reactive({ books: '—', categories: '—' })
+
+// Data filter (kelas dari /meta/filters, kategori dari /categories)
+const gradeLevels = ref([])
+const rootCategories = ref([])
+
+const gradePills = computed(() => [
+  { value: null, label: 'Semua' },
+  ...gradeLevels.value.map((g) => ({ value: g, label: labelFor(GRADE_LABELS, g) }))
+])
+const categoryPills = computed(() => [
+  { id: null, name: 'Semua Kategori' },
+  ...rootCategories.value
 ])
 
-const filteredRekomendasi = computed(() => {
-  if (activeRekomendasi.value === 'Semua') return rekomendasiBuku.value
-  return rekomendasiBuku.value.filter(b => b.fase === activeRekomendasi.value)
-})
+// 1. Buku Terpopuler
+const activeGrade = ref(null)
+const popular = reactive({ state: 'loading', items: [], error: '' })
+let popularRequest = 0
 
-// 2. Katalog Lengkap Section Filters
-const activeKategori = ref('Semua Kategori')
-const kategoriPills = [
-  'Semua Kategori',
-  'Matematika & Sains',
-  'Fisika & Kimia Terapan',
-  'Sejarah & Sosial',
-  'Bahasa & Sastra Sunda',
-  'Informatika & Robotik',
-  'Pendidikan Karakter & Agama'
-]
-
-// Mock Data: 8 Koleksi Buku di Katalog Utama (Sesuai Mockup Figma)
-const koleksiBuku = ref([
-  {
-    id: 1,
-    title: 'Matematika Tingkat Standar & Penalaran Logis',
-    shortTitle: 'Matematika',
-    deweyCode: 'Dewey 510',
-    faseText: 'Fase E',
-    faseBadgeClass: 'bg-blue-600',
-    subCategory: 'MATEMATIKA & SAINS',
-    categoryKey: 'Matematika & Sains',
-    author: 'Dicky Susanto, dkk',
-    year: '2023',
-    pages: '234 hal.',
-    stockBadgeText: '18 Tersedia',
-    stockBadgeClass: 'bg-emerald-50 text-emerald-700 border border-emerald-200/90',
-    stockDotClass: 'bg-emerald-500',
-    coverGradient: 'bg-gradient-to-br from-[#0f3d4c] to-[#071f28]',
-    coverUrl: null
-  },
-  {
-    id: 2,
-    title: 'Sejarah Indonesia: Kolonialisme & Kebangkitan',
-    shortTitle: 'Sejarah Indonesia',
-    deweyCode: 'Dewey 959',
-    faseText: 'Fase F',
-    faseBadgeClass: 'bg-blue-600',
-    subCategory: 'SEJARAH & SOSIAL',
-    categoryKey: 'Sejarah & Sosial',
-    author: 'Sartono Kartodirdjo & Tim',
-    year: '2022',
-    pages: '288 hal.',
-    stockBadgeText: '8 Tersedia',
-    stockBadgeClass: 'bg-emerald-50 text-emerald-700 border border-emerald-200/90',
-    stockDotClass: 'bg-emerald-500',
-    coverGradient: 'bg-gradient-to-br from-[#3d2c18] to-[#1c1308]',
-    coverUrl: null
-  },
-  {
-    id: 3,
-    title: 'Kimia Hijau & Pembangunan Berkelanjutan',
-    shortTitle: 'Kimia Hijau',
-    deweyCode: 'Dewey 540',
-    faseText: 'Fase F-12',
-    faseBadgeClass: 'bg-blue-600',
-    subCategory: 'FISIKA & KIMIA',
-    categoryKey: 'Fisika & Kimia Terapan',
-    author: 'Galuh Yuliani, Ph.D.',
-    year: '2024',
-    pages: '210 hal.',
-    stockBadgeText: '2 Tersedia',
-    stockBadgeClass: 'bg-amber-50 text-amber-700 border border-amber-200/90',
-    stockDotClass: 'bg-amber-500',
-    coverGradient: 'bg-gradient-to-br from-[#0d3f34] to-[#041713]',
-    coverUrl: null
-  },
-  {
-    id: 4,
-    title: 'Katumbiri Priangan: Kumpulan Carpon & Sajak...',
-    shortTitle: 'Katumbiri Priangan',
-    deweyCode: 'Dewey 899',
-    faseText: 'Karya Daerah',
-    faseBadgeClass: 'bg-amber-600',
-    subCategory: 'BAHASA & SASTRA',
-    categoryKey: 'Bahasa & Sastra Sunda',
-    author: 'Dadan Sutisna',
-    year: '2023',
-    pages: '170 hal.',
-    stockBadgeText: '15 Tersedia',
-    stockBadgeClass: 'bg-emerald-50 text-emerald-700 border border-emerald-200/90',
-    stockDotClass: 'bg-emerald-500',
-    coverGradient: 'bg-gradient-to-br from-[#3b1e38] to-[#1a0c18]',
-    coverUrl: null
-  },
-  {
-    id: 5,
-    title: 'Pengantar Machine Learning & Rekayasa Data Siswa',
-    shortTitle: 'Machine Learning',
-    deweyCode: 'Dewey 006',
-    faseText: 'Peminatan',
-    faseBadgeClass: 'bg-sky-600',
-    subCategory: 'INFORMATIKA & AI',
-    categoryKey: 'Informatika & Robotik',
-    author: 'Riko Prasetyo, M.Kom',
-    year: '2024',
-    pages: '240 hal.',
-    stockBadgeText: 'E-Book Saja',
-    stockBadgeClass: 'bg-sky-50 text-sky-700 border border-sky-200/90',
-    stockDotClass: 'bg-sky-500',
-    coverGradient: 'bg-gradient-to-br from-[#0a2744] to-[#031120]',
-    coverUrl: null
-  },
-  {
-    id: 6,
-    title: 'Pendidikan Pancasila: Membangun Karakter Profil...',
-    shortTitle: 'Pancasila',
-    deweyCode: 'Dewey 320',
-    faseText: 'Fase E',
-    faseBadgeClass: 'bg-blue-600',
-    subCategory: 'KARAKTER & KEBANGSAAN',
-    categoryKey: 'Pendidikan Karakter & Agama',
-    author: 'Abdul Wakhid, dkk',
-    year: '2023',
-    pages: '270 hal.',
-    stockBadgeText: '40 Tersedia',
-    stockBadgeClass: 'bg-emerald-50 text-emerald-700 border border-emerald-200/90',
-    stockDotClass: 'bg-emerald-500',
-    coverGradient: 'bg-gradient-to-br from-[#121c2c] to-[#070b13]',
-    coverUrl: null
-  },
-  {
-    id: 7,
-    title: 'Matematika Tingkat Lanjut: Kalkulus & Matriks',
-    shortTitle: 'Kalkulus & Matriks',
-    deweyCode: 'Dewey 510',
-    faseText: 'Fase F-12',
-    faseBadgeClass: 'bg-blue-600',
-    subCategory: 'MATEMATIKA & SAINS',
-    categoryKey: 'Matematika & Sains',
-    author: 'Al Azhary Masta, dkk',
-    year: '2023',
-    pages: '300 hal.',
-    stockBadgeText: '11 Tersedia',
-    stockBadgeClass: 'bg-emerald-50 text-emerald-700 border border-emerald-200/90',
-    stockDotClass: 'bg-emerald-500',
-    coverGradient: 'bg-gradient-to-br from-[#132c38] to-[#071319]',
-    coverUrl: null
-  },
-  {
-    id: 8,
-    title: 'Geografi: Dinamika Litosfer & Kebencanaan di Garut',
-    shortTitle: 'Geografi Garut',
-    deweyCode: 'Dewey 910',
-    faseText: 'Fase E',
-    faseBadgeClass: 'bg-blue-600',
-    subCategory: 'GEOGRAFI & SOSIAL',
-    categoryKey: 'Sejarah & Sosial',
-    author: 'Budi Handoyo, dkk',
-    year: '2023',
-    pages: '220 hal.',
-    stockBadgeText: '25 Tersedia',
-    stockBadgeClass: 'bg-emerald-50 text-emerald-700 border border-emerald-200/90',
-    stockDotClass: 'bg-emerald-500',
-    coverGradient: 'bg-gradient-to-br from-[#1d3319] to-[#0a1408]',
-    coverUrl: null
+async function loadPopular() {
+  const id = ++popularRequest
+  popular.state = 'loading'
+  try {
+    const page = await listBooks({ sort: 'popular', size: POPULAR_SIZE, grade: activeGrade.value })
+    if (id !== popularRequest) return
+    popular.items = page.content
+    popular.state = page.content.length ? 'ready' : 'empty'
+  } catch (err) {
+    if (id !== popularRequest) return
+    popular.error = errorMessage(err)
+    popular.state = 'error'
   }
-])
+}
 
-const filteredKatalog = computed(() => {
-  if (activeKategori.value === 'Semua Kategori') return koleksiBuku.value
-  return koleksiBuku.value.filter(b => b.categoryKey === activeKategori.value)
+// 2. Katalog Lengkap
+const activeCategoryId = ref(null)
+const catalogPage = ref(0)
+const catalog = reactive({ state: 'loading', items: [], totalElements: 0, totalPages: 0, error: '' })
+let catalogRequest = 0
+
+async function loadCatalog() {
+  const id = ++catalogRequest
+  catalog.state = 'loading'
+  try {
+    const page = await listBooks({
+      sort: 'newest',
+      size: CATALOG_SIZE,
+      categoryId: activeCategoryId.value,
+      page: catalogPage.value
+    })
+    if (id !== catalogRequest) return
+    catalog.items = page.content
+    catalog.totalElements = page.totalElements
+    catalog.totalPages = page.totalPages
+    catalog.state = page.content.length ? 'ready' : 'empty'
+  } catch (err) {
+    if (id !== catalogRequest) return
+    catalog.error = errorMessage(err)
+    catalog.state = 'error'
+  }
+}
+
+function selectCategory(id) {
+  activeCategoryId.value = id
+  catalogPage.value = 0
+  loadCatalog()
+}
+
+function changeCatalogPage(page) {
+  catalogPage.value = page
+  loadCatalog()
+  document.getElementById('katalog-lengkap')?.scrollIntoView({ behavior: 'smooth' })
+}
+
+watch(activeGrade, loadPopular)
+
+async function loadStatsAndFilters() {
+  const [booksPage, tree, filters] = await Promise.allSettled([
+    listBooks({ size: 1 }),
+    listCategories('BOOK'),
+    getFilters()
+  ])
+  if (booksPage.status === 'fulfilled') stats.books = formatNumber(booksPage.value.totalElements)
+  if (tree.status === 'fulfilled') {
+    rootCategories.value = tree.value.map((c) => ({ id: c.id, name: c.name }))
+    stats.categories = formatNumber(flattenCategories(tree.value).length)
+  }
+  if (filters.status === 'fulfilled') gradeLevels.value = filters.value.gradeLevels || []
+}
+
+onMounted(() => {
+  loadStatsAndFilters()
+  loadPopular()
+  loadCatalog()
 })
+
+// "Penulis (Tahun)", bagian kosong dilewati
+function authorLine(buku) {
+  if (buku.author && buku.publicationYear) return `${buku.author} (${buku.publicationYear})`
+  return buku.author || (buku.publicationYear ? String(buku.publicationYear) : '')
+}
 
 // Actions: Navigasi ke Detail Buku & Reader
 const openDetail = (buku) => {
@@ -726,11 +566,11 @@ const openDetail = (buku) => {
 }
 
 const openReader = (buku) => {
-  router.push(`/buku/${buku.id}`)
+  router.push({ path: `/buku/${buku.id}`, hash: '#baca' })
 }
 
 const showGuideAlert = () => {
-  alert('Panduan Membaca E-Book Digital SMAN 11 Garut:\n1. Pilih buku yang diinginkan.\n2. Klik tombol "Baca" untuk membuka reader offline.\n3. Fitur bookmark dan pencarian teks tersedia secara lokal.')
+  alert('Panduan Membaca E-Book Digital SMAN 11 Garut:\n1. Cari buku lewat Katalog atau menu Cari & Filter.\n2. Klik "Baca" untuk membuka buku langsung di browser (format PDF).\n3. Klik "Unduh" di halaman detail untuk menyimpan berkas dan membacanya secara luring.')
 }
 </script>
 
