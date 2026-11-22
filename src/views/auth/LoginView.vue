@@ -74,7 +74,7 @@
                   AKSES AMAN TERPUSAT
                 </span>
                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] sm:text-[11px] font-semibold bg-[#EBF2F7] text-[#336688]">
-                  User & Admin
+                  Guru & Pustakawan
                 </span>
               </div>
 
@@ -88,59 +88,15 @@
             </div>
           </div>
 
-          <!-- Section: Pilih Hak Akses Penugasan -->
-          <div class="mt-6 sm:mt-7">
-            <label class="block text-xs font-semibold text-slate-700 mb-2">
-              Pilih Hak Akses Penugasan
-            </label>
-
-            <!-- Segmented Control Switch (User vs Admin) -->
-            <div class="w-full bg-[#EBF2F7] p-1 rounded-xl grid grid-cols-2 gap-1" role="tablist">
-              <!-- Option 1: Masuk sebagai User -->
-              <button
-                type="button"
-                role="tab"
-                :aria-selected="activeRole === 'user'"
-                :class="[
-                  'w-full py-2.5 px-3 rounded-lg text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer',
-                  activeRole === 'user'
-                    ? 'bg-white text-[#005B70] shadow-[0_1px_3px_rgba(0,0,0,0.06)]'
-                    : 'text-slate-600 hover:text-slate-900'
-                ]"
-                @click="switchRole('user')"
-              >
-                <!-- User ID Card Icon -->
-                <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="3" y="4" width="18" height="16" rx="2" />
-                  <circle cx="9" cy="10" r="2" />
-                  <line x1="15" y1="8" x2="17" y2="8" />
-                  <line x1="15" y1="12" x2="17" y2="12" />
-                  <path d="M6 16c0-1.5 1.5-2.5 3-2.5s3 1 3 2.5" />
-                </svg>
-                <span>Masuk sebagai User</span>
-              </button>
-
-              <!-- Option 2: Administrator Sistem -->
-              <button
-                type="button"
-                role="tab"
-                :aria-selected="activeRole === 'admin'"
-                :class="[
-                  'w-full py-2.5 px-3 rounded-lg text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer',
-                  activeRole === 'admin'
-                    ? 'bg-white text-[#005B70] shadow-[0_1px_3px_rgba(0,0,0,0.06)]'
-                    : 'text-slate-600 hover:text-slate-900'
-                ]"
-                @click="switchRole('admin')"
-              >
-                <!-- Shield Check Icon -->
-                <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                  <polyline points="9 12 11 14 15 10" />
-                </svg>
-                <span>Administrator Sistem</span>
-              </button>
-            </div>
+          <!-- Notice: sesi berakhir -->
+          <div
+            v-if="expiredNotice && !errorMessage && !successMessage"
+            class="mt-6 p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs flex items-center gap-2"
+          >
+            <svg class="w-4 h-4 shrink-0 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>Sesi Anda telah berakhir, silakan masuk kembali.</span>
           </div>
 
           <!-- Alert / Status Feedback Message (Offline Ready) -->
@@ -167,15 +123,13 @@
           <!-- Form Area -->
           <form @submit.prevent="handleLogin" class="mt-5 space-y-4">
             
-            <!-- Dynamic Fields: Hanya Muncul saat Mode ADMIN Aktif -->
-            <transition name="expand">
-              <div v-if="activeRole === 'admin'" class="space-y-4">
+            <div class="space-y-4">
                 
                 <!-- Input 1: NIP / Username Pengurus -->
                 <div>
                   <div class="flex items-center justify-between mb-1.5">
                     <label for="username" class="text-xs font-semibold text-slate-700">
-                      NIP / Username Pengurus
+                      Nama Pengguna
                     </label>
                     <span class="text-[11px] font-medium text-slate-400">
                       Wajib diisi
@@ -194,7 +148,8 @@
                       v-model="form.username"
                       type="text"
                       required
-                      placeholder="198403162009021004"
+                      placeholder="Nama pengguna"
+                      autocomplete="username"
                       class="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#005B70] focus:ring-2 focus:ring-[#005B70]/10 transition-all"
                     />
                   </div>
@@ -204,10 +159,10 @@
                 <div>
                   <div class="flex items-center justify-between mb-1.5">
                     <label for="password" class="text-xs font-semibold text-slate-700">
-                      Kata Sandi Akun
+                      Kata Sandi
                     </label>
                     <span class="text-[11px] font-medium text-slate-400">
-                      Min. 8 Karakter
+                      Min. 6 Karakter
                     </span>
                   </div>
                   <div class="relative flex items-center">
@@ -223,7 +178,8 @@
                       v-model="form.password"
                       :type="showPassword ? 'text' : 'password'"
                       required
-                      placeholder="GarutEleven#2025!"
+                      placeholder="Kata sandi"
+                      autocomplete="current-password"
                       class="w-full pl-10 pr-11 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#005B70] focus:ring-2 focus:ring-[#005B70]/10 transition-all tracking-wider"
                     />
                     <!-- Toggle Show/Hide Password -->
@@ -247,8 +203,7 @@
                   </div>
                 </div>
 
-              </div>
-            </transition>
+            </div>
 
             <!-- Tombol Utama Submit (Warna Teal Utama) -->
             <button
@@ -270,7 +225,7 @@
 
               <!-- Button Label & Arrow Icon Sesuai Mode Figma -->
               <template v-if="!isSubmitting">
-                <span>{{ activeRole === 'admin' ? 'Masuk ke Panel Kendali' : 'Masuk' }}</span>
+                <span>Masuk</span>
                 <!-- Door / Arrow Enter Icon [->] -->
                 <svg class="w-4 h-4 ml-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
@@ -309,14 +264,14 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, reactive, computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import schoolLogo from '../../assets/images/placeholders/logo-sman11.svg'
+import { auth } from '../../stores/auth.js'
+import { errorMessage as toErrorMessage } from '../../utils/errors.js'
 
 const router = useRouter()
-
-// Reactive Role State: 'user' atau 'admin' (Default: 'user' sesuai tampilan Figma pertama)
-const activeRole = ref('user')
+const route = useRoute()
 
 // Toggle Visibility Password
 const showPassword = ref(false)
@@ -326,19 +281,21 @@ const isSubmitting = ref(false)
 const errorMessage = ref('')
 const successMessage = ref('')
 
-// Reactive Form Object dengan v-model
 const form = reactive({
-  username: '198403162009021004',
-  password: 'GarutEleven#2025!',
-  role: 'user'
+  username: '',
+  password: ''
 })
 
-// Fungsi Ganti Mode Hak Akses (User vs Admin)
-const switchRole = (role) => {
-  activeRole.value = role
-  form.role = role
-  errorMessage.value = ''
-  successMessage.value = ''
+// Ditampilkan bila diarahkan ke sini karena sesi berakhir (401 / token kedaluwarsa)
+const expiredNotice = computed(() => route.query.expired === '1')
+
+// Hanya ikuti ?redirect= untuk path internal (cegah open redirect ke situs lain)
+function safeRedirect() {
+  const target = route.query.redirect
+  if (typeof target === 'string' && target.startsWith('/') && !target.startsWith('//') && !target.startsWith('/\\')) {
+    return target
+  }
+  return null
 }
 
 // Fallback jika logo SVG gagal load
@@ -346,66 +303,29 @@ const onLogoError = (event) => {
   event.target.style.display = 'none'
 }
 
-// Handler Autentikasi Pengurus (Login User & Admin)
+// Handler Autentikasi Staf (Guru & Pustakawan) via POST /api/auth/login
 const handleLogin = async () => {
   errorMessage.value = ''
   successMessage.value = ''
+
+  if (!form.username.trim()) {
+    errorMessage.value = 'Nama pengguna wajib diisi.'
+    return
+  }
+  if (!form.password) {
+    errorMessage.value = 'Kata sandi wajib diisi.'
+    return
+  }
+
   isSubmitting.value = true
-
   try {
-    if (activeRole.value === 'admin') {
-      // Validasi sederhana form Admin
-      if (!form.username.trim()) {
-        throw new Error('NIP / Username Pengurus wajib diisi.')
-      }
-      if (!form.password || form.password.length < 8) {
-        throw new Error('Kata Sandi minimal 8 karakter.')
-      }
-
-      /**
-       * STRUKTUR SIAP INTEGRASI BACK-END:
-       * Endpoint lokal: POST /api/v1/auth/login
-       * 
-       * const response = await fetch('/api/v1/auth/login', {
-       *   method: 'POST',
-       *   headers: { 'Content-Type': 'application/json' },
-       *   body: JSON.stringify({
-       *     username: form.username,
-       *     password: form.password,
-       *     role: 'admin'
-       *   })
-       * })
-       * const result = await response.json()
-       * if (!response.ok) throw new Error(result.message || 'Login gagal')
-       */
-
-      // Simulasi delay request offline server (600ms)
-      await new Promise(resolve => setTimeout(resolve, 600))
-
-      successMessage.value = 'Otentikasi Administrator Berhasil! Mengalihkan ke panel...'
-      
-      // Simpan session token sederhana untuk local state
-      localStorage.setItem('auth_role', 'admin')
-      localStorage.setItem('auth_user', form.username)
-
-      setTimeout(() => {
-        router.push('/admin/dashboard')
-      }, 700)
-
-    } else {
-      // Mode User: Akses langsung penugasan pustakawan / dewan guru
-      await new Promise(resolve => setTimeout(resolve, 400))
-      
-      successMessage.value = 'Akses Pengurus (User) Terverifikasi. Mengalihkan ke Presensi...'
-      localStorage.setItem('auth_role', 'user')
-
-      setTimeout(() => {
-        router.push('/presensi')
-      }, 500)
-    }
-
+    const user = await auth.login(form.username.trim(), form.password)
+    successMessage.value = `Selamat datang, ${user.fullName}. Mengalihkan...`
+    await router.replace(safeRedirect() ?? auth.homePath())
   } catch (err) {
-    errorMessage.value = err.message || 'Terjadi kesalahan saat otentikasi. Silakan periksa kredensial Anda.'
+    // 400 INVALID_CREDENTIALS / ACCOUNT_TEMPORARILY_LOCKED / server tidak terjangkau
+    errorMessage.value = toErrorMessage(err)
+    form.password = ''
   } finally {
     isSubmitting.value = false
   }
@@ -413,22 +333,6 @@ const handleLogin = async () => {
 </script>
 
 <style scoped>
-/* Smooth expand/collapse transition for dynamic admin fields */
-.expand-enter-active,
-.expand-leave-active {
-  transition: all 0.25s ease-out;
-  max-height: 250px;
-  overflow: hidden;
-  opacity: 1;
-}
-
-.expand-enter-from,
-.expand-leave-to {
-  max-height: 0px;
-  opacity: 0;
-  transform: translateY(-8px);
-}
-
 /* Subtle error shake animation */
 @keyframes shake {
   0%, 100% { transform: translateX(0); }

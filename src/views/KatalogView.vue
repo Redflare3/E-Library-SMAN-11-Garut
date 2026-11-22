@@ -25,18 +25,17 @@
 
         <!-- Action Buttons -->
         <div class="flex flex-wrap items-center gap-3 pt-1">
-          <!-- Button Presensi Mandiri Hari Ini -->
+          <!-- Button Jelajahi Koleksi -->
           <router-link
-            to="/presensi"
+            to="/kategori"
             class="px-5 py-3 rounded-xl bg-[#005B70] hover:bg-[#004859] active:bg-[#003845] text-white font-bold text-xs sm:text-sm shadow-sm transition-all flex items-center gap-2 cursor-pointer"
           >
-            <!-- User Check-in Icon -->
+            <!-- Search Icon -->
             <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-              <circle cx="11" cy="7" r="4" />
-              <polyline points="17 11 19 13 23 9" />
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
-            <span>Presensi Mandiri Hari Ini</span>
+            <span>Jelajahi Koleksi</span>
           </router-link>
 
           <!-- Button Panduan Baca E-Book -->

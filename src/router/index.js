@@ -1,17 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { auth } from '../stores/auth.js'
 
 // Views - Lazy-loaded untuk optimasi rendering modular
-const BerandaPage = () => import('../views/BerandaPage.vue')
+const KatalogView = () => import('../views/KatalogView.vue')
 const CariKategoriView = () => import('../views/CariKategoriView.vue')
 const DetailBukuView = () => import('../views/DetailBukuView.vue')
-const PresensiPage = () => import('../views/PresensiPage.vue')
-const StatistikHarianView = () => import('../views/statistik/StatistikHarianView.vue')
-const StatistikMingguanView = () => import('../views/statistik/StatistikMingguanView.vue')
-const StatistikBulananView = () => import('../views/statistik/StatistikBulananView.vue')
-const AdminDashboardPage = () => import('../views/admin/AdminDashboardPage.vue')
-const AdminDashboardView = () => import('../views/admin/AdminDashboardView.vue')
 const LoginView = () => import('../views/auth/LoginView.vue')
-const KatalogView = () => import('../views/KatalogView.vue')
+const UnggahanSayaView = () => import('../views/staff/UnggahanSayaView.vue')
+const AdminDashboardView = () => import('../views/admin/AdminDashboardView.vue')
 
 const routes = [
   {
@@ -19,8 +15,9 @@ const routes = [
     name: 'Login',
     component: LoginView,
     meta: {
-      title: 'Portal Autentikasi Pengurus - E-Library SMAN 11 Garut',
-      hideNavbar: true
+      title: 'Masuk Staf - E-Library SMAN 11 Garut',
+      hideNavbar: true,
+      guestOnly: true
     }
   },
   {
@@ -34,14 +31,6 @@ const routes = [
   {
     path: '/katalog',
     redirect: '/'
-  },
-  {
-    path: '/presensi',
-    name: 'Presensi',
-    component: PresensiPage,
-    meta: {
-      title: 'E-Library SMAN 11 Garut - Presensi Mandiri Pengunjung'
-    }
   },
   {
     path: '/kategori',
@@ -61,32 +50,18 @@ const routes = [
     }
   },
   {
-    path: '/statistik',
-    redirect: '/statistik/harian'
-  },
-  {
-    path: '/statistik/harian',
-    name: 'StatistikHarian',
-    component: StatistikHarianView,
+    path: '/unggahan',
+    name: 'UnggahanSaya',
+    component: UnggahanSayaView,
     meta: {
-      title: 'Statistik & Presensi Pengunjung - E-Library SMAN 11 Garut'
+      title: 'Unggahan Saya - E-Library SMAN 11 Garut',
+      requiresAuth: true,
+      roles: ['TEACHER', 'LIBRARIAN']
     }
   },
   {
-    path: '/statistik/mingguan',
-    name: 'StatistikMingguan',
-    component: StatistikMingguanView,
-    meta: {
-      title: 'Visualisasi Linear Tren Kunjungan - E-Library SMAN 11 Garut'
-    }
-  },
-  {
-    path: '/statistik/bulanan',
-    name: 'StatistikBulanan',
-    component: StatistikBulananView,
-    meta: {
-      title: 'Visualisasi Linear Tren Kunjungan Bulanan - E-Library SMAN 11 Garut'
-    }
+    path: '/admin',
+    redirect: '/admin/dashboard'
   },
   {
     path: '/admin/dashboard',
@@ -94,12 +69,10 @@ const routes = [
     component: AdminDashboardView,
     meta: {
       title: 'Panel Pengelola Perpustakaan - SMAN 11 Garut',
-      hideNavbar: true
+      hideNavbar: true,
+      requiresAuth: true,
+      roles: ['LIBRARIAN']
     }
-  },
-  {
-    path: '/admin',
-    redirect: '/admin/dashboard'
   },
   // Fallback Wildcard Route (404)
   {
@@ -117,6 +90,27 @@ const router = createRouter({
     }
     return { top: 0, behavior: 'smooth' }
   }
+})
+
+// Guard akses: tunggu sesi dipulihkan, lalu cek login & peran
+router.beforeEach(async (to) => {
+  await auth.init()
+
+  const loggedIn = auth.isLoggedIn.value
+
+  if (to.meta.guestOnly && loggedIn) {
+    return auth.homePath()
+  }
+
+  if (to.meta.requiresAuth && !loggedIn) {
+    return { name: 'Login', query: { redirect: to.fullPath } }
+  }
+
+  if (to.meta.roles && !to.meta.roles.includes(auth.state.user?.role)) {
+    return auth.homePath()
+  }
+
+  return true
 })
 
 // Navigation Guard untuk memperbarui judul dokumen secara offline

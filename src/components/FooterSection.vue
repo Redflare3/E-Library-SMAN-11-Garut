@@ -110,16 +110,16 @@
 
           <ul class="space-y-2 text-xs">
             <li>
-              <a href="#katalog" class="flex items-center gap-1.5 text-slate-600 hover:text-[#0B6B82] transition-colors">
+              <router-link to="/" class="flex items-center gap-1.5 text-slate-600 hover:text-[#0B6B82] transition-colors">
                 <span class="text-slate-400">›</span>
                 <span>Katalog Buku</span>
-              </a>
+              </router-link>
             </li>
             <li>
-              <a href="#kategori" class="flex items-center gap-1.5 text-slate-600 hover:text-[#0B6B82] transition-colors">
+              <router-link to="/kategori" class="flex items-center gap-1.5 text-slate-600 hover:text-[#0B6B82] transition-colors">
                 <span class="text-slate-400">›</span>
                 <span>Cari & Filter Kategori</span>
-              </a>
+              </router-link>
             </li>
             <li>
               <a href="#arsip" class="flex items-center gap-1.5 text-slate-600 hover:text-[#0B6B82] transition-colors">
@@ -128,22 +128,10 @@
               </a>
             </li>
             <li>
-              <a href="#presensi" class="flex items-center gap-1.5 text-[#0B6B82] font-semibold transition-colors">
-                <span class="text-[#0B6B82]">›</span>
-                <span>Presensi Pengunjung</span>
-              </a>
-            </li>
-            <li>
-              <a href="#statistik" class="flex items-center gap-1.5 text-slate-600 hover:text-[#0B6B82] transition-colors">
-                <span class="text-slate-400">›</span>
-                <span>Statistik Pengunjung</span>
-              </a>
-            </li>
-            <li>
-              <a href="#petugas" class="flex items-center gap-1.5 text-slate-600 hover:text-[#0B6B82] transition-colors">
+              <router-link to="/login" class="flex items-center gap-1.5 text-slate-600 hover:text-[#0B6B82] transition-colors">
                 <span class="text-slate-400">›</span>
                 <span>Portal Masuk Petugas</span>
-              </a>
+              </router-link>
             </li>
           </ul>
         </div>

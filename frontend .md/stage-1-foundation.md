@@ -1,6 +1,6 @@
 # Stage 1: Foundation (implementation plan and manual testing guide)
 
-> **Status:** Planned · **Roadmap:** [Stage 1](frontend-plan.md#stage-1-foundation) · **Backend refs:** [spec §3.4 Auth](../.md/backend-spec.md), [frontend-guide §2 Auth, §7 Errors](../frontend-guide.md)
+> **Status:** Done · **Roadmap:** [Stage 1](frontend-plan.md#stage-1-foundation) · **Backend refs:** [spec §3.4 Auth](../.md/backend-spec.md), [frontend-guide §2 Auth, §7 Errors](../frontend-guide.md)
 
 ## 1. Summary
 Connect the frontend to the real backend for auth, and remove the features the backend doesn't support. Later stages build on this.
@@ -146,7 +146,7 @@ Before each test group, start clean: `localStorage.clear(); location.reload()` i
 | # | Step | Expected |
 |---|---|---|
 | 1 | `npm run build` | Finishes with no errors and no "failed to resolve import" warnings. |
-| 2 | Search `src/` for `Presensi\|presensi\|statistik/\|BerandaPage\|KategoriPage\|DetailBukuPage\|AdminDashboardPage\|auth_role` | No matches. "Statistik" text inside `AdminDashboardView` is allowed. |
+| 2 | Search `src/` for `Presensi\|presensi\|statistik/\|BerandaPage\|KategoriPage\|DetailBukuPage\|AdminDashboardPage\|auth_role` | No matches, except `auth_role` in `src/api/token.js`, which is the code that removes the old key. "Statistik" text inside `AdminDashboardView` is allowed. |
 
 ### 5.3 Anonymous visitor
 | # | Step | Expected |
