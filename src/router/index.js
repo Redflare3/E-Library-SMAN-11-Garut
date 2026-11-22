@@ -14,6 +14,10 @@ const StatistikView = () => import('../views/admin/StatistikView.vue')
 const BukuAdminView = () => import('../views/admin/BukuAdminView.vue')
 const ArsipAdminView = () => import('../views/admin/ArsipAdminView.vue')
 const SampahView = () => import('../views/admin/SampahView.vue')
+const PenggunaView = () => import('../views/admin/PenggunaView.vue')
+const KategoriView = () => import('../views/admin/KategoriView.vue')
+const ImporView = () => import('../views/admin/ImporView.vue')
+const PenyimpananView = () => import('../views/admin/PenyimpananView.vue')
 
 const routes = [
   {
@@ -124,6 +128,30 @@ const routes = [
         name: 'AdminSampah',
         component: SampahView,
         meta: { title: 'Tempat Sampah - Panel Pustakawan' }
+      },
+      {
+        path: 'pengguna',
+        name: 'AdminPengguna',
+        component: PenggunaView,
+        meta: { title: 'Pengguna - Panel Pustakawan' }
+      },
+      {
+        path: 'kategori',
+        name: 'AdminKategori',
+        component: KategoriView,
+        meta: { title: 'Kategori - Panel Pustakawan' }
+      },
+      {
+        path: 'impor',
+        name: 'AdminImpor',
+        component: ImporView,
+        meta: { title: 'Unggah Massal - Panel Pustakawan' }
+      },
+      {
+        path: 'penyimpanan',
+        name: 'AdminPenyimpanan',
+        component: PenyimpananView,
+        meta: { title: 'Penyimpanan - Panel Pustakawan' }
       }
     ]
   },

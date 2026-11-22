@@ -160,6 +160,12 @@ export const COVER_ACCEPT = '.jpg,.jpeg,.png'
 export const ARCHIVE_FILE_ACCEPT = '.jpg,.jpeg,.png,.webp,.gif,.mp4,.webm,.mkv,.pdf,.epub,.docx,.pptx,.xlsx'
 export const MAX_UPLOAD_BYTES = 2 * 1024 ** 3
 
+// "Modul_Fisika-Kelas-X.pdf" → "Modul Fisika Kelas X" (judul awal untuk unggah massal)
+export function titleFromFileName(name) {
+  const base = String(name || '').replace(/\.[^./\\]+$/, '')
+  return base.replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 255)
+}
+
 // Cek ekstensi terhadap daftar accept (mis. ".pdf,.docx"); isi berkas tetap dicek server
 export function fileMatchesAccept(file, accept) {
   if (!file) return false
