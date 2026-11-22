@@ -9,6 +9,24 @@
     >
       <span :class="['w-2 h-2 rounded-full shrink-0', dotClass]"></span>
       <span>{{ toast.state.message }}</span>
+      <template v-if="toast.state.action">
+        <router-link
+          v-if="toast.state.action.to"
+          :to="toast.state.action.to"
+          class="ml-1 font-bold text-cyan-300 hover:text-cyan-200 underline underline-offset-2"
+          @click="toast.hide()"
+        >
+          {{ toast.state.action.label }}
+        </router-link>
+        <button
+          v-else
+          type="button"
+          class="ml-1 font-bold text-cyan-300 hover:text-cyan-200 underline underline-offset-2 cursor-pointer"
+          @click="toast.runAction()"
+        >
+          {{ toast.state.action.label }}
+        </button>
+      </template>
       <button
         type="button"
         class="ml-1 text-slate-400 hover:text-white cursor-pointer"

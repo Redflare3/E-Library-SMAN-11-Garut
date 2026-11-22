@@ -10,7 +10,10 @@ const LoginView = () => import('../views/auth/LoginView.vue')
 const StaffLayout = () => import('../layouts/StaffLayout.vue')
 const BukuSayaView = () => import('../views/staff/BukuSayaView.vue')
 const ArsipSayaView = () => import('../views/staff/ArsipSayaView.vue')
-const AdminDashboardView = () => import('../views/admin/AdminDashboardView.vue')
+const StatistikView = () => import('../views/admin/StatistikView.vue')
+const BukuAdminView = () => import('../views/admin/BukuAdminView.vue')
+const ArsipAdminView = () => import('../views/admin/ArsipAdminView.vue')
+const SampahView = () => import('../views/admin/SampahView.vue')
 
 const routes = [
   {
@@ -85,20 +88,44 @@ const routes = [
       }
     ]
   },
+  // Pengelolaan pustakawan: layout staf yang sama, menu "Pengelolaan" di sidebar
   {
     path: '/admin',
-    redirect: '/admin/dashboard'
-  },
-  {
-    path: '/admin/dashboard',
-    name: 'AdminDashboard',
-    component: AdminDashboardView,
+    component: StaffLayout,
     meta: {
-      title: 'Panel Pengelola Perpustakaan - SMAN 11 Garut',
-      hideNavbar: true,
       requiresAuth: true,
-      roles: ['LIBRARIAN']
-    }
+      roles: ['LIBRARIAN'],
+      hideNavbar: true
+    },
+    children: [
+      { path: '', redirect: { name: 'AdminStatistik' } },
+      // Tautan lama (dasbor mock sebelum Tahap 5A)
+      { path: 'dashboard', redirect: { name: 'AdminStatistik' } },
+      {
+        path: 'statistik',
+        name: 'AdminStatistik',
+        component: StatistikView,
+        meta: { title: 'Statistik - Panel Pustakawan' }
+      },
+      {
+        path: 'buku',
+        name: 'AdminBuku',
+        component: BukuAdminView,
+        meta: { title: 'Semua Buku - Panel Pustakawan' }
+      },
+      {
+        path: 'arsip',
+        name: 'AdminArsip',
+        component: ArsipAdminView,
+        meta: { title: 'Semua Arsip - Panel Pustakawan' }
+      },
+      {
+        path: 'sampah',
+        name: 'AdminSampah',
+        component: SampahView,
+        meta: { title: 'Tempat Sampah - Panel Pustakawan' }
+      }
+    ]
   },
   // Fallback Wildcard Route (404)
   {

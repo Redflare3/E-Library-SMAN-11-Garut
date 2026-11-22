@@ -92,7 +92,7 @@ const open = computed({
 
 const restoreNote = computed(() =>
   auth.isLibrarian.value
-    ? 'Dapat dipulihkan melalui Panel Admin.'
+    ? 'Dapat dipulihkan dengan tombol Urungkan atau dari Tempat Sampah sebelum dihapus permanen.'
     : 'Hanya pustakawan yang dapat memulihkan item yang dihapus.'
 )
 

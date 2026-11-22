@@ -50,6 +50,7 @@
           <span class="min-w-0">
             <span class="block font-semibold text-slate-800 truncate">{{ original?.originalName }}</span>
             <span class="block text-slate-400">{{ formatBytes(original?.fileSize) }} · Sampul tidak dapat diganti</span>
+            <span class="block text-slate-500 mt-0.5">Diunggah oleh <strong class="font-semibold">{{ original?.uploadedByName || 'Impor massal' }}</strong></span>
           </span>
         </div>
         <FilePicker
