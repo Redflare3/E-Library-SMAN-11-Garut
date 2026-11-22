@@ -39,3 +39,49 @@ export function emptyTrash(kind) {
 export function restoreItem(kind, id) {
   return kind === 'archive' ? restoreArchive(id) : restoreBook(id)
 }
+
+// ---------- Pengguna ----------
+// GET /api/admin/users → UserDto[] (array biasa, tanpa paging)
+export function listUsers() {
+  return request('/admin/users')
+}
+
+// POST /api/admin/users { username, password, fullName, role? } → UserDto (role bawaan TEACHER)
+export function createUser(body) {
+  return request('/admin/users', { method: 'POST', body })
+}
+
+// PUT /api/admin/users/{id}: kirim hanya field yang berubah { fullName?, password?, role?, active? }
+export function updateUser(id, patch) {
+  return request(`/admin/users/${encodeURIComponent(id)}`, { method: 'PUT', body: patch })
+}
+
+// ---------- Kategori ----------
+// type: 'BOOK' | 'ARCHIVE'. PUT/DELETE kategori arsip wajib ?type=ARCHIVE (frontend-guide §8)
+const categoryQuery = (type) => (type === 'ARCHIVE' ? { type: 'ARCHIVE' } : undefined)
+
+export function createCategory({ type, name, parentId = null }) {
+  return request('/admin/categories', { method: 'POST', body: { type, name, parentId } })
+}
+
+// PUT adalah pembaruan penuh: parentId null = pindah ke tingkat utama, jadi selalu kirim induk saat ini
+export function updateCategory(type, id, { name, parentId = null }) {
+  return request(`/admin/categories/${encodeURIComponent(id)}`, {
+    method: 'PUT',
+    query: categoryQuery(type),
+    body: { name, parentId }
+  })
+}
+
+export function deleteCategory(type, id) {
+  return request(`/admin/categories/${encodeURIComponent(id)}`, {
+    method: 'DELETE',
+    query: categoryQuery(type)
+  })
+}
+
+// ---------- Penyimpanan ----------
+// GET /api/admin/storage → StorageUsage (field disk null saat drive tidak terpasang)
+export function getStorage() {
+  return request('/admin/storage')
+}
