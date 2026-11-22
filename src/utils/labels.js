@@ -122,3 +122,21 @@ export const INLINE_MIME_TYPES = ['application/pdf']
 export function canPreview(mime) {
   return !!mime && INLINE_MIME_TYPES.includes(mime)
 }
+
+// ---------- Unggahan (frontend-guide §6.2) ----------
+export const BOOK_FILE_ACCEPT = '.pdf,.epub,.docx,.pptx,.xlsx'
+export const COVER_ACCEPT = '.jpg,.jpeg,.png'
+export const ARCHIVE_FILE_ACCEPT = '.jpg,.jpeg,.png,.webp,.gif,.mp4,.webm,.mkv,.pdf,.epub,.docx,.pptx,.xlsx'
+export const MAX_UPLOAD_BYTES = 2 * 1024 ** 3
+
+// Cek ekstensi terhadap daftar accept (mis. ".pdf,.docx"); isi berkas tetap dicek server
+export function fileMatchesAccept(file, accept) {
+  if (!file) return false
+  if (!accept) return true
+  const name = (file.name || '').toLowerCase()
+  return accept
+    .split(',')
+    .map((a) => a.trim().toLowerCase())
+    .filter(Boolean)
+    .some((ext) => name.endsWith(ext))
+}

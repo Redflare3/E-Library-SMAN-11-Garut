@@ -7,7 +7,9 @@ const CariKategoriView = () => import('../views/CariKategoriView.vue')
 const DetailBukuView = () => import('../views/DetailBukuView.vue')
 const ArsipView = () => import('../views/ArsipView.vue')
 const LoginView = () => import('../views/auth/LoginView.vue')
-const UnggahanSayaView = () => import('../views/staff/UnggahanSayaView.vue')
+const StaffLayout = () => import('../layouts/StaffLayout.vue')
+const BukuSayaView = () => import('../views/staff/BukuSayaView.vue')
+const ArsipSayaView = () => import('../views/staff/ArsipSayaView.vue')
 const AdminDashboardView = () => import('../views/admin/AdminDashboardView.vue')
 
 const routes = [
@@ -58,15 +60,30 @@ const routes = [
       title: 'Arsip Sekolah - E-Library SMAN 11 Garut'
     }
   },
+  // Area staf (guru & pustakawan): layout sidebar sendiri, tanpa header/footer publik
   {
     path: '/unggahan',
-    name: 'UnggahanSaya',
-    component: UnggahanSayaView,
+    component: StaffLayout,
     meta: {
-      title: 'Unggahan Saya - E-Library SMAN 11 Garut',
       requiresAuth: true,
-      roles: ['TEACHER', 'LIBRARIAN']
-    }
+      roles: ['TEACHER', 'LIBRARIAN'],
+      hideNavbar: true
+    },
+    children: [
+      { path: '', redirect: { name: 'BukuSaya' } },
+      {
+        path: 'buku',
+        name: 'BukuSaya',
+        component: BukuSayaView,
+        meta: { title: 'Buku Saya - E-Library SMAN 11 Garut' }
+      },
+      {
+        path: 'arsip',
+        name: 'ArsipSaya',
+        component: ArsipSayaView,
+        meta: { title: 'Arsip Saya - E-Library SMAN 11 Garut' }
+      }
+    ]
   },
   {
     path: '/admin',
