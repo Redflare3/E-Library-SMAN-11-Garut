@@ -6,7 +6,7 @@
       :key="n"
       class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-2xs space-y-3 animate-pulse"
     >
-      <div class="w-full aspect-[3/4] rounded-xl bg-slate-100"></div>
+      <div :class="['w-full rounded-xl bg-slate-100', aspectClass]"></div>
       <div class="h-3 rounded bg-slate-100 w-4/5"></div>
       <div class="h-3 rounded bg-slate-100 w-1/2"></div>
     </div>
@@ -62,7 +62,9 @@ defineProps({
   // Tombol pada state kosong (mis. "Reset Semua Filter"); kosongkan untuk menyembunyikan
   resetLabel: { type: String, default: '' },
   skeletonCount: { type: Number, default: 4 },
-  gridClass: { type: String, default: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4' }
+  gridClass: { type: String, default: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4' },
+  // Rasio kerangka gambar (buku 3:4, arsip 4:3)
+  aspectClass: { type: String, default: 'aspect-[3/4]' }
 })
 defineEmits(['retry', 'reset'])
 </script>
