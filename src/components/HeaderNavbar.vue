@@ -58,6 +58,19 @@
             Cari &amp; Filter<br />Kategori
           </router-link>
 
+          <!-- 3. Arsip Sekolah -->
+          <router-link 
+            to="/arsip"
+            :class="[
+              'px-4 py-2 text-xs lg:text-sm font-medium transition-colors text-center leading-tight rounded-xl cursor-pointer',
+              $route.path === '/arsip'
+                ? 'bg-[#E1EFF6] text-[#005B70] font-semibold shadow-2xs'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+            ]"
+          >
+            Arsip<br />Sekolah
+          </router-link>
+
         </nav>
 
         <!-- Right Action Buttons -->

@@ -5,6 +5,7 @@ import { auth } from '../stores/auth.js'
 const KatalogView = () => import('../views/KatalogView.vue')
 const CariKategoriView = () => import('../views/CariKategoriView.vue')
 const DetailBukuView = () => import('../views/DetailBukuView.vue')
+const ArsipView = () => import('../views/ArsipView.vue')
 const LoginView = () => import('../views/auth/LoginView.vue')
 const UnggahanSayaView = () => import('../views/staff/UnggahanSayaView.vue')
 const AdminDashboardView = () => import('../views/admin/AdminDashboardView.vue')
@@ -50,6 +51,14 @@ const routes = [
     }
   },
   {
+    path: '/arsip',
+    name: 'Arsip',
+    component: ArsipView,
+    meta: {
+      title: 'Arsip Sekolah - E-Library SMAN 11 Garut'
+    }
+  },
+  {
     path: '/unggahan',
     name: 'UnggahanSaya',
     component: UnggahanSayaView,
@@ -81,12 +90,21 @@ const routes = [
   }
 ]
 
+function onlyItemChanged(a, b) {
+  const strip = ({ item, ...rest }) => JSON.stringify(Object.entries(rest).sort())
+  return strip(a) === strip(b)
+}
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition
+    }
+    // Buka/tutup/geser lightbox arsip (?item=) tidak menggulir halaman
+    if (to.path === from.path && onlyItemChanged(to.query, from.query)) {
+      return false
     }
     return { top: 0, behavior: 'smooth' }
   }

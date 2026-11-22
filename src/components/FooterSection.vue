@@ -122,10 +122,10 @@
               </router-link>
             </li>
             <li>
-              <a href="#arsip" class="flex items-center gap-1.5 text-slate-600 hover:text-[#0B6B82] transition-colors">
+              <router-link to="/arsip" class="flex items-center gap-1.5 text-slate-600 hover:text-[#0B6B82] transition-colors">
                 <span class="text-slate-400">›</span>
-                <span>Arsip & Berita</span>
-              </a>
+                <span>Arsip Sekolah</span>
+              </router-link>
             </li>
             <li>
               <router-link to="/login" class="flex items-center gap-1.5 text-slate-600 hover:text-[#0B6B82] transition-colors">
