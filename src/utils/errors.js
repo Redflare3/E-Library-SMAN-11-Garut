@@ -29,8 +29,13 @@ export const ERROR_MESSAGES = {
   FILE_TOO_LARGE: 'Berkas terlalu besar.',
   SERVER_UNREACHABLE: 'Tidak dapat terhubung ke server perpustakaan. Periksa Wi-Fi sekolah.',
   NETWORK_ERROR: 'Tidak dapat terhubung ke server perpustakaan. Periksa Wi-Fi sekolah.',
-  UNKNOWN_ERROR: 'Terjadi kesalahan, silakan coba lagi.'
+  UNKNOWN_ERROR: 'Terjadi kesalahan, silakan coba lagi.',
+  // Dibatalkan pengguna (upload.js); tidak ditampilkan
+  ABORTED: ''
 }
+
+// Kode error yang ditampilkan pada pemilih berkas, bukan sebagai alert formulir
+export const FILE_ERROR_CODES = new Set(['FILE_REQUIRED', 'INVALID_FILE_TYPE', 'DUPLICATE_FILE', 'FILE_TOO_LARGE'])
 
 // Kode yang pesannya lebih informatif dari server (mis. lama waktu tunggu)
 const USE_SERVER_MESSAGE = new Set(['ACCOUNT_TEMPORARILY_LOCKED'])
@@ -38,5 +43,5 @@ const USE_SERVER_MESSAGE = new Set(['ACCOUNT_TEMPORARILY_LOCKED'])
 export function errorMessage(err) {
   if (!err) return ERROR_MESSAGES.UNKNOWN_ERROR
   if (USE_SERVER_MESSAGE.has(err.code) && err.message) return err.message
-  return ERROR_MESSAGES[err.code] || ERROR_MESSAGES.UNKNOWN_ERROR
+  return ERROR_MESSAGES[err.code] ?? ERROR_MESSAGES.UNKNOWN_ERROR
 }

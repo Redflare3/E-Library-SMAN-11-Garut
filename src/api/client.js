@@ -38,16 +38,32 @@ function fallbackCode(status) {
   return 'UNKNOWN_ERROR'
 }
 
-async function readError(res) {
+// Bangun ApiError dari status + teks body (dipakai fetch di sini dan XHR di upload.js)
+export function apiErrorFrom(status, bodyText) {
   try {
-    const body = await res.json()
+    const body = JSON.parse(bodyText)
     if (body && typeof body === 'object' && body.code) {
-      return new ApiError({ ...body, status: body.status ?? res.status })
+      return new ApiError({ ...body, status: body.status ?? status })
     }
   } catch {
     /* body bukan JSON (Nginx / proxy / jaringan) */
   }
-  return new ApiError({ status: res.status, code: fallbackCode(res.status) })
+  return new ApiError({ status, code: fallbackCode(status) })
+}
+
+async function readError(res) {
+  let text = ''
+  try {
+    text = await res.text()
+  } catch {
+    /* body tidak terbaca */
+  }
+  return apiErrorFrom(res.status, text)
+}
+
+// Teruskan 401 ke handler global (logout + redirect ke login)
+export function notifyUnauthorized(error) {
+  if (unauthorizedHandler) unauthorizedHandler(error)
 }
 
 /**
@@ -77,9 +93,7 @@ export async function request(
 
   if (!res.ok) {
     const error = await readError(res)
-    if (res.status === 401 && !skipAuthRedirect && unauthorizedHandler) {
-      unauthorizedHandler(error)
-    }
+    if (res.status === 401 && !skipAuthRedirect) notifyUnauthorized(error)
     throw error
   }
 
