@@ -3,7 +3,7 @@
     :type="type"
     :disabled="disabled || loading"
     :class="[
-      'inline-flex items-center justify-center font-semibold transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-1 select-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed',
+      'inline-flex items-center justify-center font-medium transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 select-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed',
       sizeClasses[size],
       variantClasses[variant],
       block ? 'w-full' : '',
@@ -58,24 +58,24 @@ defineProps({
   },
   rounded: {
     type: String,
-    default: 'xl'
+    default: 'lg'
   }
 })
 
 defineEmits(['click'])
 
 const sizeClasses = {
-  sm: 'px-3 py-1.5 text-xs gap-1.5',
-  md: 'px-4 py-2 text-sm gap-2',
-  lg: 'px-6 py-3 text-base gap-2.5'
+  sm: 'h-8 px-3 text-sm gap-1.5',
+  md: 'h-10 px-4 text-sm gap-2',
+  lg: 'h-11 px-5 text-sm gap-2'
 }
 
 const variantClasses = {
-  primary: 'bg-[#0B6B82] hover:bg-[#085568] active:bg-[#074757] text-white shadow-xs focus:ring-[#0B6B82]/40',
-  secondary: 'bg-sky-50 text-[#0B6B82] hover:bg-sky-100 focus:ring-[#0B6B82]/30 border border-sky-100',
-  outline: 'border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 focus:ring-slate-300',
-  ghost: 'text-slate-600 hover:bg-slate-100 focus:ring-slate-200',
-  danger: 'bg-rose-600 hover:bg-rose-700 text-white focus:ring-rose-400'
+  primary: 'bg-brand hover:bg-brand-dark text-white focus-visible:ring-brand/40',
+  secondary: 'bg-brand-soft text-brand hover:bg-brand-soft/70 focus-visible:ring-brand/30',
+  outline: 'border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 focus-visible:ring-slate-300',
+  ghost: 'text-slate-600 hover:bg-slate-100 focus-visible:ring-slate-200',
+  danger: 'bg-rose-600 hover:bg-rose-700 text-white focus-visible:ring-rose-400'
 }
 
 const roundedClasses = {

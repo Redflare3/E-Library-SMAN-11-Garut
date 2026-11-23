@@ -1,15 +1,15 @@
 <template>
-  <div class="min-h-screen bg-[#F8FAFC] text-slate-800 lg:flex">
+  <div class="min-h-screen bg-slate-50 text-slate-800 lg:flex">
 
     <!-- Top bar (ponsel / tablet) -->
-    <header class="lg:hidden sticky top-0 z-40 bg-white border-b border-slate-100 px-4 h-14 flex items-center justify-between">
-      <router-link to="/" class="flex items-center gap-2 min-w-0">
-        <img :src="schoolLogo" alt="Logo SMAN 11 Garut" class="w-8 h-8 object-contain shrink-0" />
-        <span class="font-bold text-sm text-slate-900 truncate">E-Library <span class="text-[#005B70]">Staf</span></span>
+    <header class="lg:hidden sticky top-0 z-40 bg-white border-b border-slate-200 px-4 h-14 flex items-center justify-between">
+      <router-link to="/" class="min-w-0 truncate text-sm">
+        <span class="font-semibold text-slate-900">E-Library</span>
+        <span class="text-slate-500"> Staf</span>
       </router-link>
       <button
         type="button"
-        class="w-10 h-10 rounded-xl hover:bg-slate-100 text-slate-700 flex items-center justify-center cursor-pointer"
+        class="w-10 h-10 rounded-lg hover:bg-slate-100 text-slate-700 flex items-center justify-center cursor-pointer"
         :aria-expanded="isDrawerOpen"
         aria-controls="staff-sidebar"
         aria-label="Buka menu"
@@ -30,52 +30,36 @@
       leave-active-class="transition-opacity duration-150"
       leave-to-class="opacity-0"
     >
-      <div v-if="isDrawerOpen" class="lg:hidden fixed inset-0 z-40 bg-slate-900/50" @click="isDrawerOpen = false"></div>
+      <div v-if="isDrawerOpen" class="lg:hidden fixed inset-0 z-40 bg-slate-900/40" @click="isDrawerOpen = false"></div>
     </transition>
 
     <!-- Sidebar -->
     <aside
       id="staff-sidebar"
       :class="[
-        'fixed lg:sticky top-0 left-0 z-50 h-screen w-72 shrink-0 bg-[#0F1E2E] text-slate-300 flex flex-col transition-transform duration-200 lg:translate-x-0',
+        'fixed lg:sticky top-0 left-0 z-50 h-screen w-64 shrink-0 bg-white border-r border-slate-200 flex flex-col transition-transform duration-200 lg:translate-x-0',
         isDrawerOpen ? 'translate-x-0' : '-translate-x-full'
       ]"
     >
-      <div class="px-5 pt-6 pb-5 flex items-center justify-between">
-        <router-link to="/" class="flex items-center gap-3 min-w-0">
-          <span class="w-10 h-10 rounded-xl bg-white p-1 flex items-center justify-center shrink-0">
-            <img :src="schoolLogo" alt="Logo SMAN 11 Garut" class="w-full h-full object-contain" />
-          </span>
-          <span class="min-w-0">
-            <span class="block font-bold text-sm text-white leading-tight">E-Library Staf</span>
-            <span class="block text-[11px] text-slate-400 leading-tight">SMAN 11 Garut</span>
-          </span>
+      <div class="px-5 h-16 flex items-center justify-between border-b border-slate-200">
+        <router-link to="/" class="min-w-0 truncate">
+          <span class="font-semibold text-slate-900">E-Library</span>
+          <span class="text-slate-500"> Staf</span>
         </router-link>
         <button
           type="button"
-          class="lg:hidden w-8 h-8 rounded-lg hover:bg-white/10 text-slate-300 flex items-center justify-center cursor-pointer"
+          class="lg:hidden w-8 h-8 rounded-lg hover:bg-slate-100 text-slate-500 flex items-center justify-center cursor-pointer"
           aria-label="Tutup menu"
           @click="isDrawerOpen = false"
         >
-          ✕
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
         </button>
       </div>
 
-      <!-- Kartu pengguna -->
-      <div class="mx-4 mb-5 p-3.5 rounded-2xl bg-white/5 border border-white/10 flex items-center gap-3">
-        <span class="w-10 h-10 rounded-full bg-[#005B70] text-white text-sm font-bold flex items-center justify-center shrink-0">
-          {{ initials }}
-        </span>
-        <span class="min-w-0">
-          <span class="block text-sm font-semibold text-white truncate">{{ auth.state.user?.fullName }}</span>
-          <span class="block text-[11px] text-slate-400">{{ roleLabel }} · @{{ auth.state.user?.username }}</span>
-        </span>
-      </div>
-
       <!-- Navigasi -->
-      <nav class="flex-1 overflow-y-auto px-3 space-y-1 text-sm" aria-label="Menu staf">
+      <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-0.5 text-sm" aria-label="Menu staf">
         <template v-for="(group, gi) in visibleGroups" :key="group.title">
-          <p :class="['px-3 pb-2 text-[10px] font-bold uppercase tracking-wider text-slate-500', gi === 0 ? 'pt-1' : 'pt-5']">
+          <p :class="['px-3 pb-1.5 text-xs font-medium text-slate-400', gi === 0 ? '' : 'pt-5']">
             {{ group.title }}
           </p>
           <router-link
@@ -83,36 +67,41 @@
             :key="link.to"
             :to="link.to"
             :class="[
-              'flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-colors',
-              isActive(link.to) ? 'bg-[#005B70] text-white' : 'hover:bg-white/5 hover:text-white'
+              'flex items-center gap-3 px-3 py-2 rounded-lg transition-colors',
+              isActive(link.to) ? 'bg-brand-soft text-brand font-medium' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
             ]"
+            :aria-current="isActive(link.to) ? 'page' : undefined"
           >
-            <span class="w-5 h-5 shrink-0" v-html="link.icon"></span>
+            <span class="w-[18px] h-[18px] shrink-0" v-html="link.icon"></span>
             <span>{{ link.label }}</span>
           </router-link>
         </template>
       </nav>
 
-      <!-- Aksi bawah -->
-      <div class="px-3 py-4 border-t border-white/10 space-y-1 text-sm">
-        <router-link to="/" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/5 hover:text-white transition-colors">
-          <span class="w-5 h-5 shrink-0" v-html="ICONS.catalog"></span>
+      <!-- Pengguna & aksi bawah -->
+      <div class="px-3 py-4 border-t border-slate-200 space-y-0.5 text-sm">
+        <div class="px-3 pb-3 min-w-0">
+          <p class="font-medium text-slate-900 truncate">{{ auth.state.user?.fullName }}</p>
+          <p class="text-xs text-slate-500 truncate">{{ roleLabel }} · @{{ auth.state.user?.username }}</p>
+        </div>
+        <router-link to="/" class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+          <span class="w-[18px] h-[18px] shrink-0" v-html="ICONS.catalog"></span>
           <span>Lihat Katalog</span>
         </router-link>
         <button
           type="button"
-          class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/5 hover:text-white transition-colors cursor-pointer text-left"
+          class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors cursor-pointer text-left"
           @click="openChangePassword"
         >
-          <span class="w-5 h-5 shrink-0" v-html="ICONS.key"></span>
+          <span class="w-[18px] h-[18px] shrink-0" v-html="ICONS.key"></span>
           <span>Ganti Kata Sandi</span>
         </button>
         <button
           type="button"
-          class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-rose-300 hover:bg-rose-500/10 hover:text-rose-200 transition-colors cursor-pointer text-left"
+          class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer text-left"
           @click="handleLogout"
         >
-          <span class="w-5 h-5 shrink-0" v-html="ICONS.logout"></span>
+          <span class="w-[18px] h-[18px] shrink-0" v-html="ICONS.logout"></span>
           <span>Keluar</span>
         </button>
       </div>
@@ -137,14 +126,13 @@ import { auth } from '../stores/auth.js'
 import { ROLE_LABELS } from '../utils/labels.js'
 import ChangePasswordModal from '../components/ChangePasswordModal.vue'
 import ToastHost from '../components/ToastHost.vue'
-import schoolLogo from '../assets/images/placeholders/logo-sman11.svg'
 
 const route = useRoute()
 const router = useRouter()
 
 // Ikon SVG statis (bukan input pengguna)
 const svg = (body) =>
-  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">${body}</svg>`
+  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full">${body}</svg>`
 const ICONS = {
   book: svg('<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>'),
   archive: svg('<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>'),
@@ -191,16 +179,6 @@ const visibleGroups = computed(() => GROUPS.filter((g) => !g.librarianOnly || au
 const isActive = (to) => route.path === to || route.path.startsWith(to + '/')
 
 const roleLabel = computed(() => ROLE_LABELS[auth.state.user?.role] || '')
-const initials = computed(() => {
-  const name = auth.state.user?.fullName || auth.state.user?.username || ''
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((w) => w[0].toUpperCase())
-    .join('')
-})
-
 // Drawer ponsel: tutup saat pindah halaman atau Esc
 const isDrawerOpen = ref(false)
 watch(() => route.fullPath, () => {

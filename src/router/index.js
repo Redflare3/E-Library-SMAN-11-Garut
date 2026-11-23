@@ -3,7 +3,6 @@ import { auth } from '../stores/auth.js'
 
 // Views - Lazy-loaded untuk optimasi rendering modular
 const KatalogView = () => import('../views/KatalogView.vue')
-const CariKategoriView = () => import('../views/CariKategoriView.vue')
 const DetailBukuView = () => import('../views/DetailBukuView.vue')
 const ArsipView = () => import('../views/ArsipView.vue')
 const LoginView = () => import('../views/auth/LoginView.vue')
@@ -18,6 +17,8 @@ const PenggunaView = () => import('../views/admin/PenggunaView.vue')
 const KategoriView = () => import('../views/admin/KategoriView.vue')
 const ImporView = () => import('../views/admin/ImporView.vue')
 const PenyimpananView = () => import('../views/admin/PenyimpananView.vue')
+
+const keepQueryTo = (path) => (to) => ({ path, query: to.query })
 
 const routes = [
   {
@@ -35,28 +36,19 @@ const routes = [
     name: 'Katalog',
     component: KatalogView,
     meta: {
-      title: 'Katalog Utama - E-Library SMAN 11 Garut'
+      title: 'Katalog Buku - E-Library SMAN 11 Garut'
     }
   },
-  {
-    path: '/katalog',
-    redirect: '/'
-  },
-  {
-    path: '/kategori',
-    alias: '/search',
-    name: 'Kategori',
-    component: CariKategoriView,
-    meta: {
-      title: 'Cari & Filter Kategori - E-Library SMAN 11 Garut'
-    }
-  },
+  // Tautan lama: halaman Cari & Filter sudah digabung ke katalog (parameter query sama)
+  { path: '/katalog', redirect: keepQueryTo('/') },
+  { path: '/kategori', redirect: keepQueryTo('/') },
+  { path: '/search', redirect: keepQueryTo('/') },
   {
     path: '/buku/:id',
     name: 'DetailBuku',
     component: DetailBukuView,
     meta: {
-      title: 'Detail & Pembaca Dokumen - E-Library SMAN 11 Garut'
+      title: 'Detail Buku - E-Library SMAN 11 Garut'
     }
   },
   {

@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
       <div>
-        <h1 class="text-2xl font-black tracking-tight text-slate-900">Statistik Perpustakaan</h1>
+        <h1 class="text-2xl font-semibold tracking-tight text-slate-900">Statistik Perpustakaan</h1>
         <p class="text-sm text-slate-500 mt-1">{{ todayLabel }}<template v-if="loadedAt"> · diperbarui {{ loadedAt }}</template></p>
       </div>
       <BaseButton variant="outline" :loading="state === 'loading' && !!stats" @click="load">
@@ -27,12 +27,12 @@
     <!-- Kerangka pemuatan awal -->
     <div v-else-if="!stats" class="space-y-6 animate-pulse" aria-busy="true" aria-label="Memuat statistik">
       <div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-4">
-        <div v-for="n in 5" :key="n" class="h-28 rounded-2xl bg-white border border-slate-100"></div>
+        <div v-for="n in 5" :key="n" class="h-28 rounded-xl bg-white border border-slate-100"></div>
       </div>
-      <div class="h-80 rounded-2xl bg-white border border-slate-100"></div>
+      <div class="h-80 rounded-xl bg-white border border-slate-100"></div>
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div class="h-72 rounded-2xl bg-white border border-slate-100"></div>
-        <div class="h-72 rounded-2xl bg-white border border-slate-100"></div>
+        <div class="h-72 rounded-xl bg-white border border-slate-100"></div>
+        <div class="h-72 rounded-xl bg-white border border-slate-100"></div>
       </div>
     </div>
 
@@ -49,7 +49,7 @@
       </div>
 
       <!-- Tren unduhan 7 hari -->
-      <section class="bg-white rounded-2xl border border-slate-100 shadow-xs p-5 sm:p-6">
+      <section class="bg-white rounded-xl border border-slate-100 shadow-xs p-5 sm:p-6">
         <div class="flex flex-wrap items-baseline justify-between gap-2 mb-4">
           <h2 class="text-sm font-bold text-slate-800">Unduhan 7 Hari Terakhir</h2>
           <span class="text-xs text-slate-400">{{ formatNumber(weekTotal) }} unduhan</span>
@@ -62,7 +62,7 @@
 
       <!-- Komposisi koleksi -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <section class="bg-white rounded-2xl border border-slate-100 shadow-xs p-5 sm:p-6">
+        <section class="bg-white rounded-xl border border-slate-100 shadow-xs p-5 sm:p-6">
           <div class="flex items-baseline justify-between gap-2 mb-4">
             <h2 class="text-sm font-bold text-slate-800">Buku per Jenis</h2>
             <span class="text-xs text-slate-400">{{ formatNumber(stats.totalBooks) }} judul</span>
@@ -73,7 +73,7 @@
           <p class="sr-only">{{ summarize(bookTypeData) }}</p>
         </section>
 
-        <section class="bg-white rounded-2xl border border-slate-100 shadow-xs p-5 sm:p-6">
+        <section class="bg-white rounded-xl border border-slate-100 shadow-xs p-5 sm:p-6">
           <div class="flex items-baseline justify-between gap-2 mb-4">
             <h2 class="text-sm font-bold text-slate-800">Arsip per Jenis Media</h2>
             <span class="text-xs text-slate-400">{{ formatNumber(stats.totalArchiveItems) }} item</span>
@@ -98,7 +98,7 @@
           <tr v-for="(book, i) in stats.topBooks" :key="book.id" class="hover:bg-slate-50/60">
             <td class="px-5 py-3 text-xs font-bold text-slate-400 tabular-nums">{{ i + 1 }}</td>
             <td class="px-4 py-3">
-              <router-link :to="`/buku/${book.id}`" class="text-sm font-semibold text-slate-800 hover:text-[#005B70] line-clamp-2">
+              <router-link :to="`/buku/${book.id}`" class="text-sm font-semibold text-slate-800 hover:text-brand line-clamp-2">
                 {{ book.title }}
               </router-link>
               <span v-if="book.author" class="sm:hidden block text-xs text-slate-400 truncate">{{ book.author }}</span>

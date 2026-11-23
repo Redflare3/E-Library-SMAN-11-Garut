@@ -1,18 +1,18 @@
 <template>
-  <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-xs hover:border-slate-200 transition-all flex flex-col justify-between">
+  <div class="bg-white rounded-xl p-5 border border-slate-200 flex flex-col justify-between">
     <div class="flex items-start justify-between">
       <div>
-        <span class="text-[11px] font-bold tracking-wider text-slate-400 uppercase block">
+        <span class="text-sm text-slate-500 block">
           {{ title }}
         </span>
-        <div class="text-3xl sm:text-4xl font-extrabold text-[#0B6B82] mt-1 tracking-tight">
+        <div class="text-2xl sm:text-3xl font-semibold text-slate-900 mt-1 tracking-tight tabular-nums">
           {{ value }}
         </div>
       </div>
 
       <div 
         v-if="$slots.icon || icon" 
-        class="w-12 h-12 rounded-xl bg-sky-50 text-[#0B6B82] flex items-center justify-center shrink-0 border border-sky-100"
+        class="w-10 h-10 rounded-lg bg-brand-soft text-brand flex items-center justify-center shrink-0"
       >
         <slot name="icon">
           <!-- Fallback chart icon -->
@@ -23,8 +23,8 @@
       </div>
     </div>
 
-    <div v-if="subtitle || trend" class="mt-4 pt-3 border-t border-slate-50 flex items-center justify-between text-xs">
-      <span class="text-slate-400">{{ subtitle }}</span>
+    <div v-if="subtitle || trend" class="mt-3 flex items-center justify-between text-xs">
+      <span class="text-slate-500">{{ subtitle }}</span>
       <span 
         v-if="trend" 
         :class="[

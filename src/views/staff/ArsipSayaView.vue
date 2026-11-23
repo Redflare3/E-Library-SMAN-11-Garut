@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
       <div>
-        <h1 class="text-2xl font-black tracking-tight text-slate-900">Arsip Saya</h1>
+        <h1 class="text-2xl font-semibold tracking-tight text-slate-900">Arsip Saya</h1>
         <p class="text-sm text-slate-500 mt-1">
           <template v-if="list.state === 'ready'">{{ formatNumber(list.totalElements) }} item arsip yang Anda unggah</template>
           <template v-else>Foto, video, dan dokumen kegiatan sekolah yang Anda unggah</template>
@@ -47,8 +47,8 @@
               </div>
               <div class="min-w-0">
                 <p class="font-semibold text-slate-800 text-sm line-clamp-2 max-w-sm">{{ item.title }}</p>
-                <p v-if="processing[item.id]" class="text-[11px] font-semibold text-[#005B70] flex items-center gap-1.5 mt-0.5">
-                  <span class="w-3 h-3 border-2 border-[#005B70]/30 border-t-[#005B70] rounded-full animate-spin"></span>
+                <p v-if="processing[item.id]" class="text-[11px] font-semibold text-brand flex items-center gap-1.5 mt-0.5">
+                  <span class="w-3 h-3 border-2 border-brand/30 border-t-brand rounded-full animate-spin"></span>
                   Memproses thumbnail…
                 </p>
                 <p v-else-if="item.categoryName" class="text-xs text-slate-400 truncate max-w-sm">{{ item.categoryName }}</p>
@@ -72,14 +72,14 @@
         <article
           v-for="item in list.items"
           :key="item.id"
-          class="bg-white rounded-2xl border border-slate-200/80 p-3.5 shadow-2xs flex gap-3"
+          class="bg-white rounded-xl border border-slate-200/80 p-3.5 flex gap-3"
         >
           <div class="relative w-24 aspect-[4/3] rounded-lg overflow-hidden border border-slate-200 shrink-0 self-start">
             <ArchiveThumb :item="item" :cache-key="thumbKeys[item.id] || null" />
           </div>
           <div class="min-w-0 flex-1 space-y-1.5">
             <p class="font-semibold text-sm text-slate-800 line-clamp-2">{{ item.title }}</p>
-            <p v-if="processing[item.id]" class="text-[11px] font-semibold text-[#005B70]">Memproses thumbnail…</p>
+            <p v-if="processing[item.id]" class="text-[11px] font-semibold text-brand">Memproses thumbnail…</p>
             <p class="text-[11px] text-slate-500">
               {{ labelFor(MEDIA_TYPE_LABELS, item.mediaType) }} · {{ formatEventDate(item.eventDate) || 'Tanpa tanggal' }}
             </p>

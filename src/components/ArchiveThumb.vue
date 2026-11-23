@@ -12,20 +12,22 @@
 
     <!-- Cadangan: ikon jenis media (saat blob STAFF dimuat atau gambar gagal) -->
     <div v-else class="w-full h-full flex flex-col items-center justify-center gap-2 text-slate-400">
-      <MediaTypeIcon :type="item.mediaType" class="w-9 h-9" />
-      <span class="text-[10px] font-bold uppercase tracking-wider">{{ labelFor(MEDIA_TYPE_LABELS, item.mediaType) }}</span>
+      <MediaTypeIcon :type="item.mediaType" :class="quiet ? 'w-8 h-8' : 'w-9 h-9'" />
+      <span v-if="!quiet" class="text-[10px] font-bold uppercase tracking-wider">{{ labelFor(MEDIA_TYPE_LABELS, item.mediaType) }}</span>
     </div>
 
     <!-- Badge jenis media (kiri atas) -->
-    <span class="absolute top-2 left-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-white/95 text-slate-800 border border-slate-200/80 shadow-xs">
-      <MediaTypeIcon :type="item.mediaType" class="w-3 h-3 text-[#005B70]" />
+    <span v-if="!quiet" class="absolute top-2 left-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-white/95 text-slate-800 border border-slate-200/80 shadow-xs">
+      <MediaTypeIcon :type="item.mediaType" class="w-3 h-3 text-brand" />
       {{ labelFor(MEDIA_TYPE_LABELS, item.mediaType) }}
     </span>
 
-    <!-- Badge khusus staf (kanan atas) -->
+    <!-- Badge khusus staf -->
     <span
       v-if="item.visibility === 'STAFF'"
-      class="absolute top-2 right-2 text-[10px] font-bold px-2 py-0.5 rounded-md shadow-2xs border bg-amber-50 text-amber-700 border-amber-200"
+      :class="quiet
+        ? 'absolute top-2 left-2 px-1.5 py-0.5 rounded bg-white/95 text-[11px] font-medium text-amber-700'
+        : 'absolute top-2 right-2 text-[10px] font-bold px-2 py-0.5 rounded-md shadow-2xs border bg-amber-50 text-amber-700 border-amber-200'"
     >
       Khusus Staf
     </span>
@@ -60,7 +62,9 @@ const props = defineProps({
   // ArchiveSummary: { id, title, mediaType, visibility, durationSeconds }
   item: { type: Object, required: true },
   // Opsional: cache buster setelah unggah (Tahap 4), mis. timestamp
-  cacheKey: { type: [String, Number], default: null }
+  cacheKey: { type: [String, Number], default: null },
+  // Tampilan publik: tanpa badge jenis media (video tetap memakai ikon putar)
+  quiet: { type: Boolean, default: false }
 })
 
 const imageFailed = ref(false)

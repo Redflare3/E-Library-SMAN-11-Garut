@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
       <div>
-        <h1 class="text-2xl font-black tracking-tight text-slate-900">Tempat Sampah</h1>
+        <h1 class="text-2xl font-semibold tracking-tight text-slate-900">Tempat Sampah</h1>
         <p class="text-sm text-slate-500 mt-1">
           Item yang dihapus guru atau pustakawan. Pulihkan, atau hapus permanen untuk membebaskan ruang penyimpanan.
         </p>
@@ -27,7 +27,7 @@
         :aria-selected="tab === t.value"
         :class="[
           'px-4 py-1.5 rounded-lg font-semibold transition-colors cursor-pointer',
-          tab === t.value ? 'bg-white text-[#005B70] shadow-2xs' : 'text-slate-500 hover:text-slate-800'
+          tab === t.value ? 'bg-white text-brand' : 'text-slate-500 hover:text-slate-800'
         ]"
         @click="setFilter({ tab: t.value === 'buku' ? null : t.value })"
       >
@@ -93,7 +93,7 @@
         <article
           v-for="item in list.items"
           :key="item.id"
-          class="bg-white rounded-2xl border border-slate-200/80 p-3.5 shadow-2xs space-y-2"
+          class="bg-white rounded-xl border border-slate-200/80 p-3.5 space-y-2"
         >
           <p class="font-semibold text-sm text-slate-800 line-clamp-2">
             <span class="font-mono text-[11px] text-slate-400 mr-1">#{{ item.id }}</span>{{ item.title }}

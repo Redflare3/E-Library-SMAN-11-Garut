@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
       <div>
-        <h1 class="text-2xl font-black tracking-tight text-slate-900">Buku Saya</h1>
+        <h1 class="text-2xl font-semibold tracking-tight text-slate-900">Buku Saya</h1>
         <p class="text-sm text-slate-500 mt-1">
           <template v-if="list.state === 'ready'">{{ formatNumber(list.totalElements) }} judul yang Anda unggah</template>
           <template v-else>Buku, modul ajar, dan bahan ajar yang Anda unggah</template>
@@ -68,7 +68,7 @@
         <article
           v-for="book in list.items"
           :key="book.id"
-          class="bg-white rounded-2xl border border-slate-200/80 p-3.5 shadow-2xs flex gap-3"
+          class="bg-white rounded-xl border border-slate-200/80 p-3.5 flex gap-3"
         >
           <div class="relative w-14 h-20 rounded-lg overflow-hidden border border-slate-200 shrink-0">
             <BookCover :book="book" compact />

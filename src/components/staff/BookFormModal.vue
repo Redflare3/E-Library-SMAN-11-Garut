@@ -44,7 +44,7 @@
 
       <div v-else class="space-y-3">
         <div class="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs">
-          <span class="w-10 h-10 rounded-lg bg-[#E1EFF6] text-[#005B70] text-[10px] font-bold flex items-center justify-center shrink-0">
+          <span class="w-10 h-10 rounded-lg bg-brand-soft text-brand text-[11px] font-bold flex items-center justify-center shrink-0">
             {{ fileExtension(original?.originalName, original?.mimeType) }}
           </span>
           <span class="min-w-0">

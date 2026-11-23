@@ -17,7 +17,7 @@
         type="button"
         :class="[
           'min-w-8 h-8 px-2 rounded-lg font-bold flex items-center justify-center cursor-pointer transition-colors',
-          item === page ? 'bg-[#005B70] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100'
+          item === page ? 'bg-brand text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100'
         ]"
         :aria-current="item === page ? 'page' : undefined"
         @click="go(item)"

@@ -4,7 +4,7 @@
       :href="viewHref"
       target="_blank"
       rel="noopener"
-      class="w-8 h-8 rounded-lg text-slate-500 hover:text-[#005B70] hover:bg-[#EAF5F8] flex items-center justify-center transition-colors"
+      class="w-8 h-8 rounded-lg text-slate-500 hover:text-brand hover:bg-brand-soft flex items-center justify-center transition-colors"
       title="Lihat (tab baru)"
       aria-label="Lihat di tab baru"
     >
@@ -15,7 +15,7 @@
     </a>
     <button
       type="button"
-      class="w-8 h-8 rounded-lg text-slate-500 hover:text-[#005B70] hover:bg-[#EAF5F8] flex items-center justify-center transition-colors cursor-pointer"
+      class="w-8 h-8 rounded-lg text-slate-500 hover:text-brand hover:bg-brand-soft flex items-center justify-center transition-colors cursor-pointer"
       title="Edit"
       aria-label="Edit"
       @click="$emit('edit')"

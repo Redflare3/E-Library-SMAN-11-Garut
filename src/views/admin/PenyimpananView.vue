@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
       <div>
-        <h1 class="text-2xl font-black tracking-tight text-slate-900">Penyimpanan</h1>
+        <h1 class="text-2xl font-semibold tracking-tight text-slate-900">Penyimpanan</h1>
         <p class="text-sm text-slate-500 mt-1">Ruang disk server perpustakaan dan pemakaiannya per jenis koleksi.</p>
       </div>
       <BaseButton variant="outline" :loading="state === 'loading' && !!data" @click="load">Muat Ulang</BaseButton>
@@ -12,13 +12,13 @@
     <StateBlock v-if="state === 'error'" state="error" title="Gagal memuat data penyimpanan" :message="error" @retry="load" />
 
     <div v-else-if="!data" class="space-y-5 animate-pulse" aria-busy="true">
-      <div class="h-40 rounded-2xl bg-white border border-slate-100"></div>
-      <div class="h-72 rounded-2xl bg-white border border-slate-100"></div>
+      <div class="h-40 rounded-xl bg-white border border-slate-100"></div>
+      <div class="h-72 rounded-xl bg-white border border-slate-100"></div>
     </div>
 
     <template v-else>
       <!-- Disk -->
-      <section v-if="!data.available" class="rounded-2xl border border-rose-200 bg-rose-50 p-5 space-y-2" role="alert">
+      <section v-if="!data.available" class="rounded-xl border border-rose-200 bg-rose-50 p-5 space-y-2" role="alert">
         <h2 class="text-sm font-bold text-rose-800">Drive penyimpanan tidak terhubung</h2>
         <p class="text-xs text-rose-700 leading-relaxed">
           Katalog dan pencarian tetap berjalan, tetapi membaca, mengunduh, mengunggah, dan menghapus permanen berkas akan gagal
@@ -26,11 +26,11 @@
         </p>
       </section>
 
-      <section v-else class="bg-white rounded-2xl border border-slate-100 shadow-xs p-5 sm:p-6 space-y-4">
+      <section v-else class="bg-white rounded-xl border border-slate-100 shadow-xs p-5 sm:p-6 space-y-4">
         <div class="flex flex-wrap items-start justify-between gap-3">
           <div>
             <h2 class="text-sm font-bold text-slate-800">Ruang Disk</h2>
-            <p class="text-2xl font-black text-slate-900 mt-1 tabular-nums">
+            <p class="text-2xl font-semibold text-slate-900 mt-1 tabular-nums">
               {{ formatBytes(data.freeBytes) }} <span class="text-sm font-semibold text-slate-500">kosong dari {{ formatBytes(data.totalBytes) }}</span>
             </p>
           </div>
@@ -55,7 +55,7 @@
           {{ diskStatus.key === 'full'
             ? 'Unggahan ditolak sampai ruang dikosongkan.'
             : 'Ruang kosong hampir mencapai batas cadangan.' }}
-          Kosongkan <router-link to="/admin/sampah" class="font-semibold text-[#005B70] underline">Tempat Sampah</router-link>
+          Kosongkan <router-link to="/admin/sampah" class="font-semibold text-brand underline">Tempat Sampah</router-link>
           atau pindahkan berkas besar.
         </p>
       </section>
@@ -64,7 +64,7 @@
       <section class="space-y-3">
         <div class="flex items-baseline justify-between gap-2">
           <h2 class="text-sm font-bold text-slate-800">Pemakaian per Jenis</h2>
-          <router-link v-if="trashTotal.count" to="/admin/sampah" class="text-xs font-semibold text-[#005B70] hover:underline">
+          <router-link v-if="trashTotal.count" to="/admin/sampah" class="text-xs font-semibold text-brand hover:underline">
             Lihat Tempat Sampah ({{ formatNumber(trashTotal.count) }} item, {{ formatBytes(trashTotal.bytes) }})
           </router-link>
         </div>
