@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-1.5" role="status" aria-live="polite">
     <div class="flex items-center justify-between text-[11px] font-semibold">
-      <span class="text-[#005B70]">{{ processing ? 'Memproses…' : `Mengunggah ${percent}%` }}</span>
+      <span class="text-brand">{{ processing ? 'Memproses…' : `Mengunggah ${percent}%` }}</span>
       <span v-if="!processing && total" class="text-slate-400 tabular-nums">
         {{ formatBytes(loaded) }} dari {{ formatBytes(total) }}
       </span>
@@ -10,10 +10,10 @@
     <div class="h-2 rounded-full bg-slate-100 overflow-hidden">
       <div
         v-if="!processing"
-        class="h-full bg-[#005B70] rounded-full transition-[width] duration-200"
+        class="h-full bg-brand rounded-full transition-[width] duration-200"
         :style="{ width: `${percent}%` }"
       ></div>
-      <div v-else class="h-full w-1/3 bg-[#005B70] rounded-full animate-indeterminate"></div>
+      <div v-else class="h-full w-1/3 bg-brand rounded-full animate-indeterminate"></div>
     </div>
   </div>
 </template>

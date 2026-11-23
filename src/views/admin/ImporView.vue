@@ -2,7 +2,7 @@
   <div class="space-y-5">
     <!-- Header -->
     <div>
-      <h1 class="text-2xl font-black tracking-tight text-slate-900">Unggah Massal</h1>
+      <h1 class="text-2xl font-semibold tracking-tight text-slate-900">Unggah Massal</h1>
       <p class="text-sm text-slate-500 mt-1">
         Pilih banyak berkas sekaligus. Setiap berkas menjadi satu baris yang diunggah satu per satu dengan pengaturan yang sama.
       </p>
@@ -20,7 +20,7 @@
           :disabled="running"
           :class="[
             'px-4 py-1.5 rounded-lg font-semibold transition-colors cursor-pointer disabled:cursor-not-allowed',
-            target === t.value ? 'bg-white text-[#005B70] shadow-2xs' : 'text-slate-500 hover:text-slate-800'
+            target === t.value ? 'bg-white text-brand' : 'text-slate-500 hover:text-slate-800'
           ]"
           @click="switchTarget(t.value)"
         >
@@ -33,24 +33,24 @@
     </div>
 
     <!-- Pengaturan bersama -->
-    <section class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-2xs space-y-3">
+    <section class="bg-white rounded-xl border border-slate-200/80 p-4 space-y-3">
       <h2 class="text-xs font-bold text-slate-700">Pengaturan untuk semua berkas</h2>
       <fieldset :disabled="running" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
         <template v-if="target === 'book'">
           <div class="space-y-1">
-            <label for="bulk-type" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Jenis</label>
+            <label for="bulk-type" class="block text-xs font-medium text-slate-400">Jenis</label>
             <select id="bulk-type" v-model="defaults.bookType" :class="selectClass()">
               <option v-for="t in options.bookTypes" :key="t" :value="t">{{ labelFor(BOOK_TYPE_LABELS, t) }}</option>
             </select>
           </div>
           <div class="space-y-1">
-            <label for="bulk-grade" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Kelas</label>
+            <label for="bulk-grade" class="block text-xs font-medium text-slate-400">Kelas</label>
             <select id="bulk-grade" v-model="defaults.gradeLevel" :class="selectClass()">
               <option v-for="g in options.gradeLevels" :key="g" :value="g">{{ labelFor(GRADE_LABELS, g) }}</option>
             </select>
           </div>
           <div class="space-y-1">
-            <label for="bulk-curr" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Kurikulum</label>
+            <label for="bulk-curr" class="block text-xs font-medium text-slate-400">Kurikulum</label>
             <select id="bulk-curr" v-model="defaults.curriculum" :class="selectClass()">
               <option value="">— Tidak ditentukan —</option>
               <option v-for="c in options.curricula" :key="c" :value="c">{{ c }}</option>
@@ -58,18 +58,18 @@
           </div>
         </template>
         <div class="space-y-1">
-          <label for="bulk-cat" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Kategori</label>
+          <label for="bulk-cat" class="block text-xs font-medium text-slate-400">Kategori</label>
           <select id="bulk-cat" v-model="defaults.categoryId" :class="selectClass()">
             <option value="">— Tanpa kategori —</option>
             <option v-for="c in categories" :key="c.id" :value="c.id">{{ '  '.repeat(c.depth * 2) }}{{ c.name }}</option>
           </select>
         </div>
         <div v-if="target === 'archive'" class="space-y-1">
-          <label for="bulk-date" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Tanggal Kegiatan</label>
+          <label for="bulk-date" class="block text-xs font-medium text-slate-400">Tanggal Kegiatan</label>
           <input id="bulk-date" v-model="defaults.eventDate" type="date" :class="selectClass()" />
         </div>
         <div class="space-y-1">
-          <label for="bulk-vis" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Akses</label>
+          <label for="bulk-vis" class="block text-xs font-medium text-slate-400">Akses</label>
           <select id="bulk-vis" v-model="defaults.visibility" :class="selectClass()">
             <option value="PUBLIC">Publik</option>
             <option value="STAFF">Khusus Staf</option>
@@ -82,20 +82,20 @@
     <!-- Zona berkas -->
     <label
       :class="[
-        'flex flex-col items-center justify-center gap-1.5 px-4 py-8 rounded-2xl border-2 border-dashed text-center transition-colors',
+        'flex flex-col items-center justify-center gap-1.5 px-4 py-8 rounded-xl border-2 border-dashed text-center transition-colors',
         running || rows.length >= MAX_ROWS ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer',
-        isDragging ? 'border-[#005B70] bg-[#EAF5F8]' : 'border-slate-200 bg-white hover:border-[#005B70]/50'
+        isDragging ? 'border-brand bg-brand-soft' : 'border-slate-200 bg-white hover:border-brand/50'
       ]"
       @dragover.prevent="!running && (isDragging = true)"
       @dragleave.prevent="isDragging = false"
       @drop.prevent="onDrop"
     >
-      <svg class="w-7 h-7 text-[#005B70]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg class="w-7 h-7 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
         <polyline points="17 8 12 3 7 8" />
         <line x1="12" y1="3" x2="12" y2="15" />
       </svg>
-      <span class="text-sm font-semibold text-slate-700">Tarik &amp; lepas banyak berkas, atau <span class="text-[#005B70] underline">pilih berkas</span></span>
+      <span class="text-sm font-semibold text-slate-700">Tarik &amp; lepas banyak berkas, atau <span class="text-brand underline">pilih berkas</span></span>
       <span class="text-[11px] text-slate-400">{{ acceptLabel }} · maks. {{ formatBytes(MAX_UPLOAD_BYTES) }} per berkas · maks. {{ MAX_ROWS }} berkas per antrean</span>
       <input type="file" multiple class="sr-only" :accept="accept" :disabled="running || rows.length >= MAX_ROWS" @change="onPick" />
     </label>
@@ -112,13 +112,13 @@
     </div>
 
     <!-- Antrean -->
-    <section v-if="rows.length" class="bg-white rounded-2xl border border-slate-100 shadow-xs overflow-hidden">
+    <section v-if="rows.length" class="bg-white rounded-xl border border-slate-100 shadow-xs overflow-hidden">
       <div class="px-4 py-3 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div class="text-xs text-slate-600 space-y-1 min-w-0 flex-1">
           <template v-if="running">
-            <strong class="text-[#005B70]">Mengunggah {{ processedCount + 1 }} dari {{ batchTotal }}</strong>
+            <strong class="text-brand">Mengunggah {{ processedCount + 1 }} dari {{ batchTotal }}</strong>
             <span class="block h-1.5 rounded-full bg-slate-100 overflow-hidden max-w-sm">
-              <span class="block h-full bg-[#005B70] rounded-full transition-[width]" :style="{ width: `${batchPercent}%` }"></span>
+              <span class="block h-full bg-brand rounded-full transition-[width]" :style="{ width: `${batchPercent}%` }"></span>
             </span>
           </template>
           <template v-else>
@@ -151,7 +151,7 @@
         </router-link>
       </div>
 
-      <div class="hidden md:grid grid-cols-[2rem_minmax(0,1.1fr)_minmax(0,1.6fr)_10rem_2rem] gap-3 px-3 py-2 mt-2 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100">
+      <div class="hidden md:grid grid-cols-[2rem_minmax(0,1.1fr)_minmax(0,1.6fr)_10rem_2rem] gap-3 px-3 py-2 mt-2 text-xs font-medium text-slate-400 border-b border-slate-100">
         <span>#</span><span>Berkas</span><span>Judul{{ target === 'book' ? ' · Penulis' : '' }}</span><span>Status</span><span></span>
       </div>
       <ul>

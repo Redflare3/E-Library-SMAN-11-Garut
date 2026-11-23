@@ -2,7 +2,7 @@
   <li
     :class="[
       'grid grid-cols-1 md:grid-cols-[2rem_minmax(0,1.1fr)_minmax(0,1.6fr)_10rem_2rem] gap-2 md:gap-3 md:items-center px-3 py-3 border-b border-slate-100',
-      row.status === 'uploading' || row.status === 'processing' ? 'bg-[#EAF5F8]/60' : ''
+      row.status === 'uploading' || row.status === 'processing' ? 'bg-brand-soft/60' : ''
     ]"
   >
     <span class="hidden md:block text-xs font-mono text-slate-400 tabular-nums">{{ index + 1 }}</span>
@@ -23,7 +23,7 @@
         placeholder="Judul"
         :disabled="!editable"
         :class="[
-          'w-full rounded-lg border bg-white text-xs text-slate-800 px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#0B6B82]/30 focus:border-[#0B6B82] disabled:bg-transparent disabled:border-transparent disabled:px-0 disabled:font-semibold',
+          'w-full rounded-lg border bg-white text-xs text-slate-800 px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand disabled:bg-transparent disabled:border-transparent disabled:px-0 disabled:font-semibold',
           editable && !row.title.trim() ? 'border-rose-300' : 'border-slate-200'
         ]"
         @input="$emit('update', { title: $event.target.value })"
@@ -36,7 +36,7 @@
         :aria-label="`Penulis untuk ${row.file.name}`"
         placeholder="Penulis (opsional)"
         :disabled="!editable"
-        class="w-full rounded-lg border border-slate-200 bg-white text-xs text-slate-600 px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#0B6B82]/30 disabled:bg-transparent disabled:border-transparent disabled:px-0"
+        class="w-full rounded-lg border border-slate-200 bg-white text-xs text-slate-600 px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand/30 disabled:bg-transparent disabled:border-transparent disabled:px-0"
         @input="$emit('update', { author: $event.target.value })"
       />
       <span v-if="editable && !row.title.trim()" class="block text-[11px] text-rose-500">Judul wajib diisi.</span>
@@ -45,13 +45,13 @@
     <!-- Status -->
     <span class="min-w-0 text-xs">
       <template v-if="row.status === 'uploading' || row.status === 'processing'">
-        <span class="font-semibold text-[#005B70]">{{ row.status === 'processing' ? 'Memproses…' : `Mengunggah ${percent}%` }}</span>
+        <span class="font-semibold text-brand">{{ row.status === 'processing' ? 'Memproses…' : `Mengunggah ${percent}%` }}</span>
         <span class="mt-1 block h-1.5 rounded-full bg-slate-100 overflow-hidden">
-          <span class="block h-full bg-[#005B70] rounded-full transition-[width]" :style="{ width: row.status === 'processing' ? '100%' : `${percent}%` }"></span>
+          <span class="block h-full bg-brand rounded-full transition-[width]" :style="{ width: row.status === 'processing' ? '100%' : `${percent}%` }"></span>
         </span>
       </template>
       <template v-else>
-        <span :class="['inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold border', STATUS[row.status].cls]">
+        <span :class="['inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold border', STATUS[row.status].cls]">
           {{ STATUS[row.status].label }}
         </span>
         <a
@@ -59,7 +59,7 @@
           :href="resultHref"
           target="_blank"
           rel="noopener"
-          class="ml-2 text-[11px] font-semibold text-[#005B70] hover:underline"
+          class="ml-2 text-[11px] font-semibold text-brand hover:underline"
         >Lihat</a>
         <span v-if="row.message" class="block mt-1 text-[11px] leading-snug" :class="row.status === 'failed' ? 'text-rose-600' : 'text-slate-500'">
           {{ row.message }}

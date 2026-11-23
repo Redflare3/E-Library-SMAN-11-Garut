@@ -18,7 +18,7 @@
       </div>
 
       <!-- Pratinjau item -->
-      <div class="bg-slate-50 rounded-2xl p-3.5 border border-slate-200/80 flex items-center gap-3.5">
+      <div class="bg-slate-50 rounded-xl p-3.5 border border-slate-200/80 flex items-center gap-3.5">
         <div
           :class="[
             'relative shrink-0 rounded-lg overflow-hidden border border-slate-200 bg-slate-100',

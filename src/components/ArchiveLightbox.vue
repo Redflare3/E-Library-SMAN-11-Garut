@@ -143,17 +143,11 @@
     <!-- ===================== PANEL INFO ===================== -->
     <aside class="relative bg-white lg:w-96 shrink-0 lg:h-full lg:overflow-y-auto p-5 sm:p-6 space-y-5 text-slate-800">
       <div class="flex items-start justify-between gap-3">
-        <div class="min-w-0 space-y-2">
-          <div class="flex flex-wrap items-center gap-1.5">
-            <span v-if="info.mediaType" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-[#E1EFF6] text-[#005B70]">
-              <MediaTypeIcon :type="info.mediaType" class="w-3 h-3" />
-              {{ labelFor(MEDIA_TYPE_LABELS, info.mediaType) }}
-            </span>
-            <span v-if="info.visibility === 'STAFF'" class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
-              Khusus Staf
-            </span>
-          </div>
-          <h2 class="text-base sm:text-lg font-extrabold leading-snug break-words">
+        <div class="min-w-0 space-y-1">
+          <p v-if="info.mediaType" class="text-sm text-slate-500">
+            {{ labelFor(MEDIA_TYPE_LABELS, info.mediaType) }}<span v-if="info.visibility === 'STAFF'" class="text-amber-700"> · Khusus Staf</span>
+          </p>
+          <h2 class="text-lg font-semibold text-slate-900 leading-snug break-words">
             <template v-if="info.title">{{ info.title }}</template>
             <span v-else class="block h-5 w-48 rounded bg-slate-100 animate-pulse"></span>
           </h2>
@@ -174,7 +168,7 @@
         <a
           v-if="info.visibility === 'PUBLIC'"
           :href="archiveDownloadUrl(info.id)"
-          class="w-full py-2.5 bg-[#005B70] hover:bg-[#004859] text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2 transition-colors shadow-2xs"
+          class="w-full h-10 bg-brand hover:bg-brand-dark text-white text-sm font-medium rounded-lg flex items-center justify-center gap-2 transition-colors"
           @click="$emit('notify', `Mengunduh ${info.originalName || info.title}…`)"
         >
           <DownloadIcon />
@@ -183,7 +177,7 @@
         <button
           v-else
           type="button"
-          class="w-full py-2.5 bg-[#005B70] hover:bg-[#004859] text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2 transition-colors shadow-2xs cursor-pointer disabled:opacity-60 disabled:cursor-wait"
+          class="w-full h-10 bg-brand hover:bg-brand-dark text-white text-sm font-medium rounded-lg flex items-center justify-center gap-2 transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-wait"
           :disabled="downloading || !info.visibility"
           @click="download"
         >
@@ -199,54 +193,47 @@
       </div>
 
       <!-- Metadata -->
-      <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2.5 text-xs">
-        <dt class="text-slate-400">Tanggal kegiatan</dt>
-        <dd class="font-semibold">{{ formatEventDate(info.eventDate) || 'Tanpa tanggal' }}</dd>
+      <!-- Deskripsi -->
+      <div v-if="detailState === 'loading'" class="space-y-2 animate-pulse">
+        <div class="h-3 rounded bg-slate-100"></div>
+        <div class="h-3 rounded bg-slate-100 w-4/5"></div>
+      </div>
+      <p v-else-if="detail?.description" class="text-sm text-slate-700 leading-relaxed whitespace-pre-line break-words">
+        {{ detail.description }}
+      </p>
 
-        <dt class="text-slate-400">Kategori</dt>
-        <dd class="font-semibold">{{ info.categoryName || '—' }}</dd>
+      <dl class="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-sm pt-4 border-t border-slate-100">
+        <dt class="text-slate-500">Tanggal</dt>
+        <dd class="text-slate-800">{{ formatEventDate(info.eventDate) || 'Tanpa tanggal' }}</dd>
+
+        <template v-if="info.categoryName">
+          <dt class="text-slate-500">Kategori</dt>
+          <dd class="text-slate-800">{{ info.categoryName }}</dd>
+        </template>
 
         <template v-if="dimensions">
-          <dt class="text-slate-400">Resolusi</dt>
-          <dd class="font-semibold tabular-nums">{{ dimensions }}</dd>
+          <dt class="text-slate-500">Resolusi</dt>
+          <dd class="text-slate-800 tabular-nums">{{ dimensions }}</dd>
         </template>
 
         <template v-if="duration">
-          <dt class="text-slate-400">Durasi</dt>
-          <dd class="font-semibold tabular-nums">{{ duration }}</dd>
+          <dt class="text-slate-500">Durasi</dt>
+          <dd class="text-slate-800 tabular-nums">{{ duration }}</dd>
         </template>
 
-        <dt class="text-slate-400">Diunduh</dt>
-        <dd class="font-semibold">{{ formatNumber(info.viewCount) }}×</dd>
-
         <template v-if="detail">
-          <dt class="text-slate-400">Berkas</dt>
-          <dd class="font-semibold break-all">{{ detail.originalName }}</dd>
+          <dt class="text-slate-500">Berkas</dt>
+          <dd class="text-slate-800">{{ extension }} · {{ formatBytes(detail.fileSize) }}</dd>
 
-          <dt class="text-slate-400">Ukuran</dt>
-          <dd class="font-semibold">{{ formatBytes(detail.fileSize) }} • {{ extension }}</dd>
+          <dt class="text-slate-500">Diunggah oleh</dt>
+          <dd class="text-slate-800">{{ detail.uploadedByName || 'Impor massal' }}</dd>
 
-          <dt class="text-slate-400">Diunggah oleh</dt>
-          <dd class="font-semibold">{{ detail.uploadedByName || 'Impor massal' }}</dd>
-
-          <dt class="text-slate-400">Ditambahkan</dt>
-          <dd class="font-semibold">{{ formatDate(detail.createdAt) }}</dd>
+          <dt class="text-slate-500">Ditambahkan</dt>
+          <dd class="text-slate-800">{{ formatDate(detail.createdAt) }}</dd>
         </template>
       </dl>
 
-      <!-- Deskripsi -->
-      <div class="space-y-1.5">
-        <h3 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Deskripsi</h3>
-        <div v-if="detailState === 'loading'" class="space-y-2 animate-pulse">
-          <div class="h-3 rounded bg-slate-100"></div>
-          <div class="h-3 rounded bg-slate-100 w-4/5"></div>
-        </div>
-        <p v-else class="text-xs text-slate-600 leading-relaxed whitespace-pre-line">
-          {{ detail?.description || 'Belum ada deskripsi.' }}
-        </p>
-      </div>
-
-      <p v-if="showNav" class="hidden lg:block text-[11px] text-slate-400 pt-2 border-t border-slate-100">
+      <p v-if="showNav" class="hidden lg:block text-xs text-slate-400 pt-2 border-t border-slate-100">
         Gunakan tombol ← → untuk berpindah, Esc untuk menutup.
       </p>
     </aside>
@@ -265,7 +252,6 @@ import {
   formatDate,
   formatEventDate,
   formatDuration,
-  formatNumber,
   fileExtension,
   canPreview
 } from '../utils/labels.js'
@@ -299,7 +285,7 @@ const MediaFallback = (p, { emit: e }) =>
       'button',
       {
         type: 'button',
-        class: 'inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white text-[#005B70] text-xs font-bold hover:bg-slate-100 transition-colors cursor-pointer',
+        class: 'inline-flex items-center gap-2 px-4 h-10 rounded-lg bg-white text-slate-900 text-sm font-medium hover:bg-slate-100 transition-colors cursor-pointer',
         onClick: () => e('download')
       },
       [h(DownloadIcon), 'Unduh Berkas']

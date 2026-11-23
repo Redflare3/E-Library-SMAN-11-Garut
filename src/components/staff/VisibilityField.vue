@@ -7,13 +7,13 @@
         :key="opt.value"
         :class="[
           'flex items-start gap-2.5 p-3 rounded-xl border cursor-pointer transition-colors',
-          modelValue === opt.value ? 'border-[#005B70] bg-[#EAF5F8]' : 'border-slate-200 hover:border-slate-300',
+          modelValue === opt.value ? 'border-brand bg-brand-soft' : 'border-slate-200 hover:border-slate-300',
           disabled ? 'opacity-60 cursor-not-allowed' : ''
         ]"
       >
         <input
           type="radio"
-          class="mt-0.5 text-[#005B70] focus:ring-[#005B70]"
+          class="mt-0.5 text-brand focus:ring-brand"
           :value="opt.value"
           :checked="modelValue === opt.value"
           @change="$emit('update:modelValue', opt.value)"

@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
       <div>
-        <h1 class="text-2xl font-black tracking-tight text-slate-900">Kategori</h1>
+        <h1 class="text-2xl font-semibold tracking-tight text-slate-900">Kategori</h1>
         <p class="text-sm text-slate-500 mt-1">Kategori dipakai pada formulir unggah dan filter katalog. Buku dan arsip punya pohon kategori sendiri.</p>
       </div>
       <BaseButton @click="openCreate(null)">
@@ -22,7 +22,7 @@
         :aria-selected="type === t.value"
         :class="[
           'px-4 py-1.5 rounded-lg font-semibold transition-colors cursor-pointer',
-          type === t.value ? 'bg-white text-[#005B70] shadow-2xs' : 'text-slate-500 hover:text-slate-800'
+          type === t.value ? 'bg-white text-brand' : 'text-slate-500 hover:text-slate-800'
         ]"
         @click="setType(t.value)"
       >
@@ -41,7 +41,7 @@
       @retry="load"
     />
 
-    <section v-else class="bg-white rounded-2xl border border-slate-100 shadow-xs overflow-hidden">
+    <section v-else class="bg-white rounded-xl border border-slate-100 shadow-xs overflow-hidden">
       <ul>
         <CategoryTreeRow
           v-for="node in tree"

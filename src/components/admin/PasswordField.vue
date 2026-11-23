@@ -12,7 +12,7 @@
           autocomplete="new-password"
           :disabled="disabled"
           :class="[
-            'w-full rounded-xl border bg-white text-sm text-slate-800 pl-3.5 pr-10 py-2.5 font-mono focus:outline-none focus:ring-2 focus:ring-[#0B6B82]/30 focus:border-[#0B6B82]',
+            'w-full rounded-xl border bg-white text-sm text-slate-800 pl-3.5 pr-10 py-2.5 font-mono focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand',
             error ? 'border-rose-300' : 'border-slate-200 hover:border-slate-300'
           ]"
           @input="$emit('update:modelValue', $event.target.value)"

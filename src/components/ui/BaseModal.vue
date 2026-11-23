@@ -10,23 +10,24 @@
     >
       <div 
         v-if="modelValue" 
-        class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6"
+        class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/40 flex items-center justify-center p-4 sm:p-6"
         @click.self="closeOnBackdrop && emit('update:modelValue', false)"
       >
         <div
           :class="[
-            'w-full bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden transform transition-all',
+            'w-full bg-white rounded-xl shadow-xl overflow-hidden transform transition-all',
             maxWidthClasses[maxWidth]
           ]"
         >
           <!-- Modal Header -->
-          <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-            <h3 class="text-base sm:text-lg font-bold text-slate-900">
+          <div class="px-6 pt-5 pb-1 flex items-center justify-between gap-4">
+            <h3 class="text-lg font-semibold text-slate-900">
               <slot name="title">{{ title }}</slot>
             </h3>
             <button
               type="button"
-              class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+              class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+              aria-label="Tutup"
               @click="emit('update:modelValue', false)"
             >
               <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -36,12 +37,12 @@
           </div>
 
           <!-- Modal Body -->
-          <div class="p-6">
+          <div class="px-6 py-5">
             <slot />
           </div>
 
           <!-- Modal Footer -->
-          <div v-if="$slots.footer" class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-3">
+          <div v-if="$slots.footer" class="px-6 py-4 border-t border-slate-100 flex items-center justify-end gap-2">
             <slot name="footer" />
           </div>
         </div>

@@ -34,11 +34,11 @@
             :key="opt.value"
             :class="[
               'flex items-start gap-2.5 p-3 rounded-xl border cursor-pointer transition-colors',
-              form.role === opt.value ? 'border-[#005B70] bg-[#EAF5F8]' : 'border-slate-200 hover:border-slate-300',
+              form.role === opt.value ? 'border-brand bg-brand-soft' : 'border-slate-200 hover:border-slate-300',
               isSelf ? 'opacity-60 cursor-not-allowed' : ''
             ]"
           >
-            <input v-model="form.role" type="radio" class="mt-0.5 text-[#005B70] focus:ring-[#005B70]" :value="opt.value" />
+            <input v-model="form.role" type="radio" class="mt-0.5 text-brand focus:ring-brand" :value="opt.value" />
             <span>
               <span class="block text-xs font-bold text-slate-800">{{ opt.label }}</span>
               <span class="block text-[11px] text-slate-500 leading-snug">{{ opt.help }}</span>

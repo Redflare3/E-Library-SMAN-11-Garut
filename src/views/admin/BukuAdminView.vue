@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
       <div>
-        <h1 class="text-2xl font-black tracking-tight text-slate-900">Semua Buku</h1>
+        <h1 class="text-2xl font-semibold tracking-tight text-slate-900">Semua Buku</h1>
         <p class="text-sm text-slate-500 mt-1">
           <template v-if="list.state === 'ready'">{{ formatNumber(list.totalElements) }} judul ditemukan</template>
           <template v-else>Seluruh koleksi buku, termasuk unggahan guru, impor massal, dan Khusus Staf</template>
@@ -16,9 +16,9 @@
     </div>
 
     <!-- Filter -->
-    <section class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-2xs grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-xs">
+    <section class="bg-white rounded-xl border border-slate-200/80 p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-xs">
       <div class="sm:col-span-2 lg:col-span-1 space-y-1">
-        <label for="admin-book-q" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Cari</label>
+        <label for="admin-book-q" class="block text-xs font-medium text-slate-400">Cari</label>
         <input
           id="admin-book-q"
           v-model="searchInput"
@@ -28,7 +28,7 @@
         />
       </div>
       <div class="space-y-1">
-        <label for="admin-book-cat" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Kategori</label>
+        <label for="admin-book-cat" class="block text-xs font-medium text-slate-400">Kategori</label>
         <select id="admin-book-cat" :value="filters.categoryId ?? ''" :class="selectClass()" @change="setFilter({ categoryId: $event.target.value || null })">
           <option value="">Semua Kategori</option>
           <option v-for="cat in categories" :key="cat.id" :value="String(cat.id)">
@@ -37,21 +37,21 @@
         </select>
       </div>
       <div class="space-y-1">
-        <label for="admin-book-grade" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Kelas</label>
+        <label for="admin-book-grade" class="block text-xs font-medium text-slate-400">Kelas</label>
         <select id="admin-book-grade" :value="filters.grade ?? ''" :class="selectClass()" @change="setFilter({ grade: $event.target.value || null })">
           <option value="">Semua Kelas</option>
           <option v-for="g in gradeLevels" :key="g" :value="g">{{ labelFor(GRADE_LABELS, g) }}</option>
         </select>
       </div>
       <div class="space-y-1">
-        <label for="admin-book-type" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Jenis</label>
+        <label for="admin-book-type" class="block text-xs font-medium text-slate-400">Jenis</label>
         <select id="admin-book-type" :value="filters.type ?? ''" :class="selectClass()" @change="setFilter({ type: $event.target.value || null })">
           <option value="">Semua Jenis</option>
           <option v-for="t in bookTypes" :key="t" :value="t">{{ labelFor(BOOK_TYPE_LABELS, t) }}</option>
         </select>
       </div>
       <div class="space-y-1">
-        <label for="admin-book-sort" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Urutkan</label>
+        <label for="admin-book-sort" class="block text-xs font-medium text-slate-400">Urutkan</label>
         <select id="admin-book-sort" :value="filters.sort ?? 'newest'" :class="selectClass()" @change="setFilter({ sort: $event.target.value === 'newest' ? null : $event.target.value })">
           <option value="newest">Terbaru Diunggah</option>
           <option value="title">Judul (A - Z)</option>
@@ -120,7 +120,7 @@
         <article
           v-for="book in list.items"
           :key="book.id"
-          class="bg-white rounded-2xl border border-slate-200/80 p-3.5 shadow-2xs flex gap-3"
+          class="bg-white rounded-xl border border-slate-200/80 p-3.5 flex gap-3"
         >
           <div class="relative w-14 h-20 rounded-lg overflow-hidden border border-slate-200 shrink-0">
             <BookCover :book="book" compact />

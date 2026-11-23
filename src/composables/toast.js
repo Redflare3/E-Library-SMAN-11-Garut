@@ -1,6 +1,7 @@
 import { reactive, readonly, markRaw } from 'vue'
 
-// Toast bersama untuk area staf (satu toast pada satu waktu). Ditampilkan oleh <ToastHost />.
+// Toast bersama (satu toast pada satu waktu). Ditampilkan oleh <ToastHost /> di App.vue (publik)
+// dan StaffLayout (staf).
 // action opsional: { label, onClick } atau { label, to } (tautan router)
 const state = reactive({ visible: false, message: '', tone: 'success', id: 0, action: null })
 let timer = null

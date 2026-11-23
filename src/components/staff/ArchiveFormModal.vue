@@ -31,7 +31,7 @@
         hint="Foto, video, atau dokumen. Jenis media dideteksi otomatis oleh server."
       />
       <div v-else class="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs">
-        <span class="w-10 h-10 rounded-lg bg-[#E1EFF6] text-[#005B70] flex items-center justify-center shrink-0">
+        <span class="w-10 h-10 rounded-lg bg-brand-soft text-brand flex items-center justify-center shrink-0">
           <MediaTypeIcon :type="original?.mediaType" class="w-5 h-5" />
         </span>
         <span class="min-w-0">

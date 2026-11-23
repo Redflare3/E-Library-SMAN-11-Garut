@@ -14,7 +14,7 @@
       ]"
     >
       <img v-if="previewUrl" :src="previewUrl" alt="Pratinjau" class="w-10 h-14 object-cover rounded-md border border-slate-200 shrink-0" />
-      <span v-else class="w-10 h-10 rounded-lg bg-[#E1EFF6] text-[#005B70] text-[10px] font-bold flex items-center justify-center shrink-0">
+      <span v-else class="w-10 h-10 rounded-lg bg-brand-soft text-brand text-[11px] font-bold flex items-center justify-center shrink-0">
         {{ extension }}
       </span>
       <span class="min-w-0 flex-1">
@@ -38,18 +38,18 @@
       :class="[
         'flex flex-col items-center justify-center gap-1.5 px-4 py-5 rounded-xl border-2 border-dashed text-center transition-colors',
         disabled ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer',
-        isDragging ? 'border-[#005B70] bg-[#EAF5F8]' : shownError ? 'border-rose-300 bg-rose-50/40' : 'border-slate-200 bg-slate-50 hover:border-[#005B70]/50'
+        isDragging ? 'border-brand bg-brand-soft' : shownError ? 'border-rose-300 bg-rose-50/40' : 'border-slate-200 bg-slate-50 hover:border-brand/50'
       ]"
       @dragover.prevent="!disabled && (isDragging = true)"
       @dragleave.prevent="isDragging = false"
       @drop.prevent="onDrop"
     >
-      <svg class="w-6 h-6 text-[#005B70]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg class="w-6 h-6 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
         <polyline points="17 8 12 3 7 8" />
         <line x1="12" y1="3" x2="12" y2="15" />
       </svg>
-      <span class="text-xs font-semibold text-slate-700">Tarik &amp; lepas berkas, atau <span class="text-[#005B70] underline">pilih berkas</span></span>
+      <span class="text-xs font-semibold text-slate-700">Tarik &amp; lepas berkas, atau <span class="text-brand underline">pilih berkas</span></span>
       <span class="text-[11px] text-slate-400">{{ acceptLabel }} · maks. {{ formatBytes(maxBytes) }}</span>
       <input
         ref="input"

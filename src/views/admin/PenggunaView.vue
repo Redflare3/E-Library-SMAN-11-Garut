@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
       <div>
-        <h1 class="text-2xl font-black tracking-tight text-slate-900">Pengguna</h1>
+        <h1 class="text-2xl font-semibold tracking-tight text-slate-900">Pengguna</h1>
         <p class="text-sm text-slate-500 mt-1">
           Akun guru dan pustakawan. Akun tidak dapat dihapus; nonaktifkan akun yang tidak lagi dipakai.
         </p>
@@ -15,13 +15,13 @@
     </div>
 
     <!-- Filter (di sisi klien) -->
-    <section class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-2xs grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+    <section class="bg-white rounded-xl border border-slate-200/80 p-4 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
       <div class="sm:col-span-2 space-y-1">
-        <label for="user-q" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Cari</label>
+        <label for="user-q" class="block text-xs font-medium text-slate-400">Cari</label>
         <input id="user-q" v-model="search" type="search" placeholder="Nama atau nama pengguna…" :class="selectClass()" />
       </div>
       <div class="space-y-1">
-        <label for="user-role" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Peran</label>
+        <label for="user-role" class="block text-xs font-medium text-slate-400">Peran</label>
         <select id="user-role" v-model="roleFilter" :class="selectClass()">
           <option value="">Semua Peran</option>
           <option value="LIBRARIAN">Pustakawan</option>
@@ -55,7 +55,7 @@
         <tr v-for="u in visibleUsers" :key="u.id" :class="['hover:bg-slate-50/60', u.active ? '' : 'text-slate-400']">
           <td class="px-4 py-3 text-sm font-semibold" :class="u.active ? 'text-slate-800' : 'text-slate-400'">
             {{ u.fullName }}
-            <span v-if="isSelf(u)" class="ml-1 text-[10px] font-bold text-[#005B70]">(Anda)</span>
+            <span v-if="isSelf(u)" class="ml-1 text-[11px] font-bold text-brand">(Anda)</span>
           </td>
           <td class="px-4 py-3 text-xs font-mono">@{{ u.username }}</td>
           <td class="px-4 py-3"><RoleBadge :role="u.role" /></td>
@@ -69,11 +69,11 @@
 
       <!-- Kartu (ponsel) -->
       <div class="md:hidden space-y-3">
-        <article v-for="u in visibleUsers" :key="u.id" class="bg-white rounded-2xl border border-slate-200/80 p-3.5 shadow-2xs space-y-2">
+        <article v-for="u in visibleUsers" :key="u.id" class="bg-white rounded-xl border border-slate-200/80 p-3.5 space-y-2">
           <div class="flex items-start justify-between gap-2">
             <div class="min-w-0">
               <p class="font-semibold text-sm truncate" :class="u.active ? 'text-slate-800' : 'text-slate-400'">
-                {{ u.fullName }} <span v-if="isSelf(u)" class="text-[10px] font-bold text-[#005B70]">(Anda)</span>
+                {{ u.fullName }} <span v-if="isSelf(u)" class="text-[11px] font-bold text-brand">(Anda)</span>
               </p>
               <p class="text-[11px] font-mono text-slate-400">@{{ u.username }}</p>
             </div>
@@ -121,8 +121,8 @@ const RoleBadge = (p) =>
     'span',
     {
       class: [
-        'inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold border whitespace-nowrap',
-        p.role === 'LIBRARIAN' ? 'bg-[#EAF5F8] text-[#005B70] border-[#CFE7EE]' : 'bg-slate-50 text-slate-600 border-slate-200'
+        'inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold border whitespace-nowrap',
+        p.role === 'LIBRARIAN' ? 'bg-brand-soft text-brand border-brand/20' : 'bg-slate-50 text-slate-600 border-slate-200'
       ]
     },
     ROLE_LABELS[p.role] || p.role
@@ -134,7 +134,7 @@ const StatusBadge = (p) =>
     'span',
     {
       class: [
-        'inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold border whitespace-nowrap',
+        'inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold border whitespace-nowrap',
         p.active ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-slate-100 text-slate-500 border-slate-200'
       ]
     },

@@ -1,9 +1,9 @@
 <template>
-  <div class="w-full overflow-hidden bg-white rounded-2xl border border-slate-100 shadow-xs">
+  <div class="w-full overflow-hidden bg-white rounded-xl border border-slate-200">
     <div class="overflow-x-auto">
       <table class="w-full text-left text-sm text-slate-600">
         <!-- Table Header -->
-        <thead class="bg-slate-50/80 text-[11px] uppercase tracking-wider text-slate-500 border-b border-slate-100 font-semibold select-none">
+        <thead class="text-xs text-slate-500 border-b border-slate-200 font-medium select-none">
           <tr>
             <slot name="header" />
           </tr>
@@ -27,7 +27,7 @@
     </div>
 
     <!-- Table Pagination / Footer -->
-    <div v-if="$slots.footer" class="px-6 py-3.5 bg-slate-50/50 border-t border-slate-100 text-xs text-slate-500">
+    <div v-if="$slots.footer" class="px-6 py-3.5 border-t border-slate-100 text-sm text-slate-500">
       <slot name="footer" />
     </div>
   </div>
